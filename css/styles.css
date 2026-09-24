@@ -1910,3 +1910,7 @@ html[data-stage="2"] .footer__brand .stain-word, html[data-stage="3"] .footer__b
 
 /* v18: al llegar por #t1..t3 la temporada queda debajo de la navbar, no tapada */
 .season-acc { scroll-margin-top: calc(var(--nav-h) + 16px); }
+
+/* v19: el video del hero se recorta más para dejar afuera la barra de título y los controles de YouTube */
+.hero .screen__video iframe { transform: translate(-50%, -50%) scale(1.32); }
+@media (max-width: 900px) { .hero .screen__video iframe { transform: translate(-50%, -50%) scale(1.7); } }

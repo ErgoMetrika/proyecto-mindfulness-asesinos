@@ -379,7 +379,9 @@
         f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&mute=1&controls=0&loop=1&playlist=' + id +
                 '&start=' + start + '&rel=0&modestbranding=1&playsinline=1&disablekb=1&iv_load_policy=3';
         f.title = 'Tráiler en loop, sin sonido'; f.allow = 'autoplay; encrypted-media'; f.tabIndex = -1;
+        screen.classList.add('is-loading');
         videoBox.appendChild(f);
+        window.setTimeout(function () { screen.classList.remove('is-loading'); }, 5000);
       }
       window.onYouTubeIframeAPIReady = function () {
         if (!window.YT || !YT.Player) { fallbackIframe(); return; }
@@ -396,13 +398,15 @@
             onStateChange: function (e) {
               const P = YT.PlayerState;
               if (e.data === P.PLAYING) {
-                screen.classList.remove('is-loading');
+                // la primera vez se muestra recién a los 4 s: YouTube dibuja su barra de título y controles al arrancar
+                if (!e.target.__shown) { e.target.__shown = true; window.setTimeout(function () { screen.classList.remove('is-loading'); }, 4000); }
+                else screen.classList.remove('is-loading');
                 // vuelve al inicio un segundo y medio antes del final: nunca aparece la pantalla de "videos relacionados"
                 if (!e.target.__loop) {
                   e.target.__loop = setInterval(function () {
                     try {
                       const d = e.target.getDuration(), t = e.target.getCurrentTime();
-                      if (d && t > d - 1.5) { screen.classList.add('is-loading'); e.target.seekTo(start, true); }
+                      if (d && t > d - 2.6) { screen.classList.add('is-loading'); e.target.seekTo(start, true); }
                     } catch (err) {}
                   }, 250);
                 }
