@@ -61,6 +61,9 @@ index.html         Lección 01 · hero inmersivo + índice del curso
 personajes.html    Lección 02 · carrusel de personajes
 trailer.html       Lección 03 · tráiler oficial (salpica al dar play)
 temporadas.html    Lección 04 · desplegable con las tres temporadas (la 3ª, en rodaje)
+temporada-1.html   Temporada 1 completa (sinopsis, ficha, episodios, elenco, momentos)
+temporada-2.html   Temporada 2 completa
+temporada-3.html   Temporada 3: lo confirmado y lo previsto (marcado)
 quiz.html          Lección 05 · quiz "¿Qué tan Björn estás hoy?"
 galeria.html       Lección 06 · galería con lightbox
 contacto.html      Consultorio · formulario de contacto

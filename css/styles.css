@@ -1963,3 +1963,11 @@ html[data-stage="2"] .footer__brand .stain-word, html[data-stage="3"] .footer__b
 /* v20: en las páginas de temporada los episodios no dependen del desplegable */
 .eps--page > li { opacity: 1; transform: none; transition: none; }
 .ep--soon .ep__still { grid-column: 1 / 3; }
+
+/* v20.1: cabecera de temporada en móvil: nada empuja el ancho */
+.season-hero { grid-template-columns: minmax(0, 1fr); }
+.season-hero__body { min-width: 0; }
+.season-hero .season-acc__meta { flex-wrap: wrap; gap: var(--s-1) var(--s-3); }
+.facts { min-width: 0; }
+.facts dd, .facts dt { overflow-wrap: anywhere; }
+@media (max-width: 640px) { .facts { grid-template-columns: minmax(0, 1fr); } }
