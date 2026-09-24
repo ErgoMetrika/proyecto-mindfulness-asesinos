@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Reemplazar por la URL final al publicar
+Sitemap: https://TU-DOMINIO/sitemap.xml

@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="es" data-stage="2">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Temporadas 1, 2 y 3 de Mindfulness para asesinos</title>
+  <meta name="description" content="Las dos temporadas de Mindfulness para asesinos episodio por episodio, y todo lo que se sabe de la tercera: en rodaje en 2026, estreno previsto en 2027.">
+  <meta name="author" content="Proyecto de clase · Mindfulness para asesinos">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#F3F1EA">
+  <meta name="color-scheme" content="light">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mindfulness para asesinos">
+  <meta property="og:locale" content="es_AR">
+  <meta property="og:title" content="Temporadas 1, 2 y 3 de Mindfulness para asesinos">
+  <meta property="og:description" content="Las dos temporadas de Mindfulness para asesinos episodio por episodio, y todo lo que se sabe de la tercera: en rodaje en 2026, estreno previsto en 2027.">
+  <meta property="og:image" content="assets/img/galeria/galeria-01.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Temporadas 1, 2 y 3 de Mindfulness para asesinos">
+  <meta name="twitter:description" content="Las dos temporadas de Mindfulness para asesinos episodio por episodio, y todo lo que se sabe de la tercera: en rodaje en 2026, estreno previsto en 2027.">
+  <meta name="twitter:image" content="assets/img/galeria/galeria-01.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400&family=Montserrat:wght@800;900&family=Work+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23F3F1EA'/%3E%3Cpath d='M16 4c3 7 8 11 8 17a8 8 0 0 1-16 0c0-6 5-10 8-17z' fill='%237A1620'/%3E%3C/svg%3E">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Inicio", "item": "index.html"}, {"@type": "ListItem", "position": 2, "name": "Temporadas", "item": "temporadas.html"}]}</script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="temporadas">
+
+<!-- ===== Fondo: la página respira (anillos), y la sangre le gana terreno lección a lección ===== -->
+<div class="breath-bg" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span class="breath-bg__word breath-bg__word--in">Inhalá</span><span class="breath-bg__word breath-bg__word--out">Exhalá</span></div>
+
+<!-- ===== SVG global: filtros reutilizables ===== -->
+<svg class="svg-defs" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="f-wobble" x="-30%" y="-30%" width="160%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018 0.026" numOctaves="4" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="46" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="f-wobble-2" x="-30%" y="-30%" width="160%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="21" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="30" xChannelSelector="R" yChannelSelector="B"/>
+      <feGaussianBlur stdDeviation="1.4"/>
+    </filter>
+    <filter id="f-wobble-small" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="3" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="f-soft"><feGaussianBlur stdDeviation="7"/></filter>
+    <!-- sangre realista: gradiente (centro espeso), borde oscuro (seco), brillo húmedo y grano -->
+    <radialGradient id="g-pool" cx="48%" cy="52%" r="60%">
+      <stop offset="0" stop-color="#4E0A12"/>
+      <stop offset=".55" stop-color="#6E121B"/>
+      <stop offset="1" stop-color="#8A1B26"/>
+    </radialGradient>
+    <filter id="f-blood" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018 0.026" numOctaves="4" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="46" xChannelSelector="R" yChannelSelector="G" result="shape"/>
+      <feMorphology in="shape" operator="erode" radius="2.5" result="inner"/>
+      <feComposite in="shape" in2="inner" operator="out" result="rim"/>
+      <feFlood flood-color="#3A060C" flood-opacity=".75" result="rimColor"/>
+      <feComposite in="rimColor" in2="rim" operator="in" result="rimDark"/>
+      <feGaussianBlur in="shape" stdDeviation="7" result="blurA"/>
+      <feSpecularLighting in="blurA" surfaceScale="8" specularConstant=".42" specularExponent="22" lighting-color="#ffe6e6" result="spec">
+        <fePointLight x="150" y="40" z="260"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="shape" operator="in" result="specIn"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3" result="grain"/>
+      <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .05 0" result="grainA"/>
+      <feComposite in="grainA" in2="shape" operator="in" result="grainIn"/>
+      <feMerge><feMergeNode in="shape"/><feMergeNode in="grainIn"/><feMergeNode in="rimDark"/><feMergeNode in="specIn"/></feMerge>
+    </filter>
+    <filter id="f-goo-blood" x="-15%" y="-15%" width="130%" height="140%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2.4" result="b"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" seed="9" result="n"/>
+      <feDisplacementMap in="b" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" result="bd"/>
+      <feColorMatrix in="bd" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 16 -6" result="goo"/>
+      <feGaussianBlur in="goo" stdDeviation=".7" result="shape"/>
+      <feMorphology in="shape" operator="erode" radius="1.6" result="inner"/>
+      <feComposite in="shape" in2="inner" operator="out" result="rim"/>
+      <feFlood flood-color="#33050A" flood-opacity=".7" result="rimColor"/>
+      <feComposite in="rimColor" in2="rim" operator="in" result="rimDark"/>
+      <feGaussianBlur in="shape" stdDeviation="5" result="blurA"/>
+      <feSpecularLighting in="blurA" surfaceScale="7" specularConstant=".42" specularExponent="24" lighting-color="#ffe9e9" result="spec">
+        <fePointLight x="120" y="30" z="240"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="shape" operator="in" result="specIn"/>
+      <feMerge><feMergeNode in="shape"/><feMergeNode in="rimDark"/><feMergeNode in="specIn"/></feMerge>
+    </filter>
+    <filter id="f-goo-blood-m" x="-15%" y="-15%" width="130%" height="140%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.6" result="b"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="3" seed="9" result="n"/>
+      <feDisplacementMap in="b" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G" result="bd"/>
+      <feColorMatrix in="bd" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 16 -6" result="goo"/>
+      <feGaussianBlur in="goo" stdDeviation=".5" result="shape"/>
+      <feMorphology in="shape" operator="erode" radius="1" result="inner"/>
+      <feComposite in="shape" in2="inner" operator="out" result="rim"/>
+      <feFlood flood-color="#33050A" flood-opacity=".7" result="rimColor"/>
+      <feComposite in="rimColor" in2="rim" operator="in" result="rimDark"/>
+      <feGaussianBlur in="shape" stdDeviation="3" result="blurA"/>
+      <feSpecularLighting in="blurA" surfaceScale="4" specularConstant=".28" specularExponent="26" lighting-color="#ffe9e9" result="spec">
+        <fePointLight x="70" y="10" z="150"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="shape" operator="in" result="specIn"/>
+      <feMerge><feMergeNode in="shape"/><feMergeNode in="rimDark"/><feMergeNode in="specIn"/></feMerge>
+    </filter>
+    <filter id="f-blood-soft" x="-15%" y="-15%" width="130%" height="140%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" seed="9" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G" result="shape"/>
+      <feGaussianBlur in="shape" stdDeviation="3.5" result="blurA"/>
+      <feSpecularLighting in="blurA" surfaceScale="4" specularConstant=".07" specularExponent="34" lighting-color="#ffe4e4" result="spec">
+        <fePointLight x="120" y="30" z="240"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="shape" operator="in" result="specIn"/>
+      <feMerge><feMergeNode in="shape"/><feMergeNode in="specIn"/></feMerge>
+    </filter>
+    <filter id="f-sat" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" seed="21" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="14" xChannelSelector="R" yChannelSelector="B"/>
+    </filter>
+    <!-- mancha reutilizable para los bordes de las secciones infectadas -->
+    <symbol id="s-stain" viewBox="0 0 600 420">
+      <g filter="url(#f-blood)">
+        <path fill="url(#g-pool)" d="M300 205 c-40-120 60-140 130-100 c 60 30 90 70 70 130 c-15 50-90 80-150 65 c-70-15-130-40-135-95 c-3-40 40-60 85 0z"/>
+        <path fill="#6E121B" d="M150 215 c-40-10-70 20-55 40 c 20 25 60 10 55-40z"/>
+        <path fill="#6E121B" d="M470 150 c 30-25 70-10 60 15 c-10 25-50 20-60-15z"/>
+        <path fill="#6E121B" d="M330 300 c 8 40 6 80 4 110 c-1 10-12 10-13 0 c-2-30-4-70 9-110z"/>
+      </g>
+      <g filter="url(#f-sat)" fill="#6E121B">
+        <path d="M0-11 C3-5 5-2 5 2 A5 5 0 1 1 -5 2 C-5-2 -3-5 0-11z" transform="translate(520 300) rotate(114) scale(1.40)"/>
+        <path d="M0-11 C3-5 5-2 5 2 A5 5 0 1 1 -5 2 C-5-2 -3-5 0-11z" transform="translate(120 120) rotate(-66) scale(1.00)"/>
+        <path d="M0-11 C3-5 5-2 5 2 A5 5 0 1 1 -5 2 C-5-2 -3-5 0-11z" transform="translate(400 352) rotate(147) scale(1.70)"/>
+        <path d="M0-11 C3-5 5-2 5 2 A5 5 0 1 1 -5 2 C-5-2 -3-5 0-11z" transform="translate(560 270) rotate(105) scale(0.50)"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<a class="skip-link" href="#main">Saltar al contenido</a>
+
+<!-- ===== Navbar ===== -->
+<header class="site-header" id="site-header">
+  <nav class="nav" aria-label="Principal">
+    <a class="nav__brand" href="index.html">Mindfulness para asesinos</a>
+
+    <ul class="nav__links" id="nav-links">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="personajes.html">Personajes</a></li>
+      <li><a href="trailer.html">Tráiler</a></li>
+      <li><a href="temporadas.html">Temporadas</a></li>
+      <li><a href="quiz.html">Quiz</a></li>
+      <li><a href="galeria.html">Galería</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
+    </ul>
+
+    <a class="nav__brand nav__brand--stained" href="index.html" aria-label="Mindfulness para asesinos">
+      <span aria-hidden="true">Mindfulness para <span class="stain-word">asesinos<svg class="stain-word__drip" viewBox="0 0 6 22" aria-hidden="true"><path d="M3 0 C3 8 1.5 12 3 22" /><circle cx="3" cy="19.5" r="2.4"/></svg></span></span>
+    </a>
+
+    <button class="nav__toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Abrir menú">
+      <span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<main id="main" class="page page--temporadas">
+
+  <!-- ===== TEMPORADAS (desplegable) ===== -->
+  <section class="section section--temporadas" id="temporadas" data-stage="2" aria-labelledby="temporadas-title">
+    <div class="shell">
+      <header class="section__head">
+        <p class="eyebrow reveal">Lección 04 · Soltar</p>
+        <p class="exercise reveal" data-type="Soltar lleva tiempo. Dieciséis episodios y una tercera temporada, para ser exactos."><span class="exercise__num">Ejercicio 4</span><span class="exercise__text" aria-label="Soltar lleva tiempo. Dieciséis episodios y una tercera temporada, para ser exactos."></span></p>
+        <h1 class="section__title reveal" id="temporadas-title">Dos temporadas hechas. Una en <em class="stain-word">camino</em></h1>
+        <p class="section__lead reveal">Abrí una temporada por vez. Los episodios marcados son los que dejan consecuencias. La tercera todavía no dejó ninguna: se está filmando.</p>
+      </header>
+
+      <div class="seasons-acc reveal">
+        <details class="season-acc" id="t1" open>
+          <summary class="season-acc__sum">
+            <span class="season-acc__num" aria-hidden="true">01</span>
+            <span class="season-acc__title">El curso</span>
+            <span class="season-acc__meta"><span>2024</span><span>8 episodios</span><span>3 con consecuencias</span></span>
+            <span class="season-acc__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="season-acc__panel"><div class="season-acc__inner">
+            <figure class="season__poster">
+              <img src="assets/img/temporadas/temporada-01.jpg" width="480" height="720" alt="Poster de la temporada 1" loading="lazy" onerror="this.closest('.season-acc').classList.add('is-placeholder')">
+              <figcaption class="season__ph"><span aria-hidden="true">T1</span><small>poster pendiente · temporada-01.jpg</small></figcaption>
+            </figure>
+            <div class="season-acc__body">
+              <p>Björn empieza el curso de Breitner para salvar su matrimonio y encuentra, en la primera lección, una forma de resolver el problema con su cliente. Lo que sigue es aprender a vivir con la solución: esconderla, administrarla y, sobre todo, mantener la calma.</p>
+              <ol class="eps eps--stills" aria-label="Episodios de la temporada 1">
+            <li>
+              <figure class="ep__still"><img src="assets/img/episodios/t1-01.jpg" width="342" height="192" alt="Fotograma del episodio 1 de la temporada 1: Respirar" loading="lazy" onerror="this.parentElement.classList.add('is-placeholder')"></figure>
+              <span class="ep__num">01</span><span class="ep__title">Respirar</span>
+            </li>
+            <li>
+              <figure class="ep__still"><img src="assets/img/episodios/t1-02.jpg" width="342" height="192" alt="Fotograma del episodio 2 de la temporada 1: Felicidad" loading="lazy" onerror="this.parentElement.classList.add('is-placeholder')"></figure>
+              <span class="ep__num">02</span><span class="ep__title">Felicidad</span>
+            </li>
+            <li>
+              <figure class="ep__still"><img src="assets/img/episodios/t1-03.jpg" width="342" height="192" alt="Fotograma del episodio 3 de la temporada 1: Miedo" loading="lazy" onerror="this.parentElement.classList.add('is-placeholder')"></figure>
+              <span class="ep__num">03</span><span class="ep__title">Miedo</span>
+            </li>
+            <li>
+              <figure class="ep__still"><img src="assets/img/episodios/t1-04.jpg" width="342" height="192" alt="Fotograma del episodio 4 de la temporada 1: Desvergüenza" loading="lazy" onerror="this.parentElement.classList.add('is-placeholder')"></figure>
+              <span class="ep__num">04</span><span class="ep__title">Desvergüenza</span>
+            </li>
+            <li>
+              <figure class="ep__still"><img src="assets/img/episodios/t1-05.jpg" width="342" height="192" alt="Fotograma del episodio 5 de la temporada 1: Pánico" loading="lazy" onerror="this.parentElement.classList.add('is-placeholder')"></figure>
+              <span class="ep__num">05</span><span class="ep__title">Pánico</span>
+            </li>
+            <li data-stained>
+              <figure class="ep__still"><img src="assets/img/episodios/t1-06.jpg" width="342" height="192" alt="Fotograma del episodio 6 de la temporada 1: Lluvia de ideas" loading="lazy" onerror="this.parentElement.classList.add('is-placeholder')"></figure>
+              <span class="ep__num">06</span><span class="ep__title">Lluvia de ideas</span>
+            </li>
+            <li data-stained>
+              <figure class="ep__still"><img src="assets/img/episodios/t1-07.jpg" width="342" height="192" alt="Fotograma del episodio 7 de la temporada 1: Ira" loading="lazy" onerror="this.parentElement.classList.add('is-placeholder')"></figure>
+              <span class="ep__num">07</span><span class="ep__title">Ira</span>
+            </li>
+            <li data-stained>
+              <figure class="ep__still"><img src="assets/img/episodios/t1-08.jpg" width="342" height="192" alt="Fotograma del episodio 8 de la temporada 1: Muerte" loading="lazy" onerror="this.parentElement.classList.add('is-placeholder')"></figure>
+              <span class="ep__num">08</span><span class="ep__title">Muerte</span>
+            </li>
+              </ol>
+            </div>
+          </div></div>
+        </details>
+
+        <details class="season-acc" id="t2">
+          <summary class="season-acc__sum">
+            <span class="season-acc__num" aria-hidden="true">02</span>
+            <span class="season-acc__title">La práctica avanzada</span>
+            <span class="season-acc__meta"><span>2026</span><span>8 episodios</span><span>6 con consecuencias</span></span>
+            <span class="season-acc__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="season-acc__panel"><div class="season-acc__inner">
+            <figure class="season__poster">
+              <img src="assets/img/temporadas/temporada-02.jpg" width="480" height="720" alt="Poster de la temporada 2" loading="lazy" onerror="this.closest('.season-acc').classList.add('is-placeholder')">
+              <figcaption class="season__ph"><span aria-hidden="true">T2</span><small>poster pendiente · temporada-02.jpg</small></figcaption>
+            </figure>
+            <div class="season-acc__body">
+              <p>Con el equilibrio recuperado y una organización entera que ahora depende de él, Björn descubre que la calma también se sostiene con trabajo. Nuevos socios, viejas deudas y una fiscal que no suelta nada.</p>
+              <ol class="eps eps--stills" aria-label="Episodios de la temporada 2">
+            <li>
+              <figure class="ep__still"><img src="assets/img/episodios/t2-01.jpg" width="342" height="192" alt="Fotograma del episodio 1 de la temporada 2: Vacaciones" loading="lazy" onerror="this.parentElement.classList.add('is-placeholder')"></figure>
+              <span class="ep__num">01</span><span class="ep__title">Vacaciones</span>
+            </li>
+            <li>
+              <figure class="ep__still"><img src="assets/img/episodios/t2-02.jpg" width="342" height="192" alt="Fotograma del episodio 2 de la temporada 2: Realidad" loading="lazy" onerror="this.parentElement.classList.add('is-placeholder')"></figure>
+              <span class="ep__num">02</span><span class="ep__title">Realidad</span>
+            </li>
+            <li data-stained>
+              <figure class="ep__still"><img src="assets/img/episodios/t2-03.jpg" width="342" height="192" alt="Fotograma del episodio 3 de la temporada 2: Padres" loading="lazy" onerror="this.parentElement.classList.add('is-placeholder')"></figure>
+              <span class="ep__num">03</span><span class="ep__title">Padres</span>
+            </li>
+            <li data-stained>
+              <figure class="ep__still"><img src="assets/img/episodios/t2-04.jpg" width="342" height="192" alt="Fotograma del episodio 4 de la temporada 2: Creatividad" loading="lazy" onerror="this.parentElement.classList.add('is-placeholder')"></figure>
+              <span class="ep__num">04</span><span class="ep__title">Creatividad</span>
+            </li>
+            <li data-stained>
+              <figure class="ep__still"><img src="assets/img/episodios/t2-05.jpg" width="342" height="192" alt="Fotograma del episodio 5 de la temporada 2: Conocimiento" loading="lazy" onerror="this.parentElement.classList.add('is-placeholder')"></figure>
+              <span class="ep__num">05</span><span class="ep__title">Conocimiento</span>
+            </li>
+            <li data-stained>
+              <figure class="ep__still"><img src="assets/img/episodios/t2-06.jpg" width="342" height="192" alt="Fotograma del episodio 6 de la temporada 2: Error" loading="lazy" onerror="this.parentElement.classList.add('is-placeholder')"></figure>
+              <span class="ep__num">06</span><span class="ep__title">Error</span>
+            </li>
+            <li data-stained>
+              <figure class="ep__still"><img src="assets/img/episodios/t2-07.jpg" width="342" height="192" alt="Fotograma del episodio 7 de la temporada 2: Duda" loading="lazy" onerror="this.parentElement.classList.add('is-placeholder')"></figure>
+              <span class="ep__num">07</span><span class="ep__title">Duda</span>
+            </li>
+            <li data-stained>
+              <figure class="ep__still"><img src="assets/img/episodios/t2-08.jpg" width="342" height="192" alt="Fotograma del episodio 8 de la temporada 2: Moral" loading="lazy" onerror="this.parentElement.classList.add('is-placeholder')"></figure>
+              <span class="ep__num">08</span><span class="ep__title">Moral</span>
+            </li>
+              </ol>
+            </div>
+          </div></div>
+        </details>
+        <details class="season-acc season-acc--soon" id="t3">
+          <summary class="season-acc__sum">
+            <span class="season-acc__num" aria-hidden="true">03</span>
+            <span class="season-acc__title">Al borde del mundo</span>
+            <span class="season-acc__meta"><span>2027</span><span>8 episodios previstos</span><span><em>en rodaje</em></span></span>
+            <span class="season-acc__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="season-acc__panel"><div class="season-acc__inner">
+            <figure class="season__poster season__poster--svg"><svg viewBox="0 0 480 720" role="img" aria-label="Temporada 3: todavía sin póster. En rodaje."><rect width="480" height="720" fill="#55614B"/><g fill="none" stroke="#F3F1EA" stroke-width="2.2" stroke-linecap="round" opacity=".85"><path d="M240 470 Q126 456 37 441" /><path d="M240 470 Q162 421 60 372" /><path d="M240 470 Q161 393 106 315" /><path d="M240 470 Q216 374 168 278" /><path d="M240 470 Q228 368 240 265" /><path d="M240 470 Q288 374 312 278" /><path d="M240 470 Q295 393 374 315" /><path d="M240 470 Q342 421 420 372" /><path d="M240 470 Q330 456 443 441" /><path d="M35 470 Q75 300 240 265 Q405 300 445 470" stroke-dasharray="2 9"/><path d="M60 470 Q95 335 240 300 Q385 335 420 470"/></g><path d="M240 265 c-2 0-6 6-6 10 a6 6 0 0 0 12 0 c0-4-4-10-6-10z" fill="#C0161C"/><text x="240" y="580" text-anchor="middle" font-family="Jost, Segoe UI, sans-serif" font-weight="200" font-size="120" fill="#F3F1EA">03</text><text x="240" y="640" text-anchor="middle" font-family="Jost, Segoe UI, sans-serif" font-size="16" letter-spacing="6" fill="#F3F1EA" opacity=".8">EN RODAJE · 2027</text></svg></figure>
+            <div class="season-acc__body">
+              <p>Netflix la confirmó en enero de 2026. Adapta la tercera novela de Karsten Dusse, <em>Achtsam morden am Rande der Welt</em> («Matar con conciencia al borde del mundo»): Björn, en plena crisis de la mediana edad, se toma el verano para hacer una peregrinación a pie. Camina, respira, mira el paisaje. Y un compañero de ruta se mete en un problema muy poco espiritual.</p>
+              <dl class="facts" aria-label="Lo que se sabe de la temporada 3">
+                <div><dt>Base</dt><dd>La tercera novela de la saga<small>Publicada en 2021; hay seis libros en total</small></dd></div>
+                <div><dt>Escenario</dt><dd>Una peregrinación de verano<small>En la novela, el Camino de Santiago</small></dd></div>
+                <div><dt>Rodaje</dt><dd>Segunda mitad de 2026<small>Con Tom Schilling de nuevo como Björn</small></dd></div>
+                <div><dt>Estreno</dt><dd>2027, según Netflix<small>Fecha exacta por confirmar</small></dd></div>
+              </dl>
+            </div>
+          </div></div>
+        </details>
+      </div>
+
+      <aside class="mantra reveal">
+        <p>«Soltar no es rendirse. Es dejar de cargar con algo que ya no te sirve. O con <em class="stain-word">alguien</em>.»</p>
+        <cite>Joschka Breitner · Lección 04</cite>
+      </aside>
+    </div>
+    <svg class="edge-stain edge-stain--a" aria-hidden="true"><use href="#s-stain"/></svg>
+  </section>
+
+</main>
+
+  <nav class="nextlesson" aria-label="Siguiente lección">
+    <div class="shell">
+      <a class="nextlesson__link reveal" href="quiz.html">
+        <span class="nextlesson__eyebrow">Siguiente lección</span>
+        <span class="nextlesson__title"><span class="nextlesson__num">05</span> Actuar con conciencia</span>
+        <span class="nextlesson__go">Quiz</span>
+      </a>
+    </div>
+  </nav>
+
+<footer class="footer">
+  <div class="shell">
+    <p class="footer__close reveal">Inhalá. Exhalá. <span class="stain-word">Cerrá la pestaña.</span></p>
+    <nav class="footer__links" aria-label="Pie"><a href="index.html">Inicio</a><a href="temporadas.html">Temporadas</a><a href="quiz.html">Quiz</a><a href="contacto.html">Contacto</a><a href="https://www.netflix.com/title/81554969" target="_blank" rel="noopener">Netflix</a></nav>
+    <div class="footer__row">
+      <p class="footer__brand">Mindfulness para <span class="stain-word">asesinos</span></p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/blood.js" defer></script>
+<script src="js/main.js" defer></script>
+</body>
+</html>

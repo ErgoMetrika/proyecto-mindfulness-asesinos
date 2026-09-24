@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="es" data-stage="2">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contacto · Mindfulness para asesinos</title>
+  <meta name="description" content="Consultorio Breitner: escribinos sobre el curso, la serie o este proyecto de clase. Respondemos en 48 horas. Si es urgente, respirá.">
+  <meta name="author" content="Proyecto de clase · Mindfulness para asesinos">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#F3F1EA">
+  <meta name="color-scheme" content="light">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mindfulness para asesinos">
+  <meta property="og:locale" content="es_AR">
+  <meta property="og:title" content="Contacto · Mindfulness para asesinos">
+  <meta property="og:description" content="Consultorio Breitner: escribinos sobre el curso, la serie o este proyecto de clase. Respondemos en 48 horas. Si es urgente, respirá.">
+  <meta property="og:image" content="assets/img/galeria/galeria-01.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Contacto · Mindfulness para asesinos">
+  <meta name="twitter:description" content="Consultorio Breitner: escribinos sobre el curso, la serie o este proyecto de clase. Respondemos en 48 horas. Si es urgente, respirá.">
+  <meta name="twitter:image" content="assets/img/galeria/galeria-01.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400&family=Montserrat:wght@800;900&family=Work+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23F3F1EA'/%3E%3Cpath d='M16 4c3 7 8 11 8 17a8 8 0 0 1-16 0c0-6 5-10 8-17z' fill='%237A1620'/%3E%3C/svg%3E">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Inicio", "item": "index.html"}, {"@type": "ListItem", "position": 2, "name": "Tráiler", "item": "trailer.html"}]}</script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="contacto">
+
+<!-- ===== Fondo: la página respira (anillos), y la sangre le gana terreno lección a lección ===== -->
+<div class="breath-bg" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span class="breath-bg__word breath-bg__word--in">Inhalá</span><span class="breath-bg__word breath-bg__word--out">Exhalá</span></div>
+
+<!-- ===== SVG global: filtros reutilizables ===== -->
+<svg class="svg-defs" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="f-wobble" x="-30%" y="-30%" width="160%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018 0.026" numOctaves="4" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="46" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="f-wobble-2" x="-30%" y="-30%" width="160%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="21" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="30" xChannelSelector="R" yChannelSelector="B"/>
+      <feGaussianBlur stdDeviation="1.4"/>
+    </filter>
+    <filter id="f-wobble-small" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="3" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="f-soft"><feGaussianBlur stdDeviation="7"/></filter>
+    <!-- sangre realista: gradiente (centro espeso), borde oscuro (seco), brillo húmedo y grano -->
+    <radialGradient id="g-pool" cx="48%" cy="52%" r="60%">
+      <stop offset="0" stop-color="#4E0A12"/>
+      <stop offset=".55" stop-color="#6E121B"/>
+      <stop offset="1" stop-color="#8A1B26"/>
+    </radialGradient>
+    <filter id="f-blood" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018 0.026" numOctaves="4" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="46" xChannelSelector="R" yChannelSelector="G" result="shape"/>
+      <feMorphology in="shape" operator="erode" radius="2.5" result="inner"/>
+      <feComposite in="shape" in2="inner" operator="out" result="rim"/>
+      <feFlood flood-color="#3A060C" flood-opacity=".75" result="rimColor"/>
+      <feComposite in="rimColor" in2="rim" operator="in" result="rimDark"/>
+      <feGaussianBlur in="shape" stdDeviation="7" result="blurA"/>
+      <feSpecularLighting in="blurA" surfaceScale="8" specularConstant=".42" specularExponent="22" lighting-color="#ffe6e6" result="spec">
+        <fePointLight x="150" y="40" z="260"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="shape" operator="in" result="specIn"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3" result="grain"/>
+      <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .05 0" result="grainA"/>
+      <feComposite in="grainA" in2="shape" operator="in" result="grainIn"/>
+      <feMerge><feMergeNode in="shape"/><feMergeNode in="grainIn"/><feMergeNode in="rimDark"/><feMergeNode in="specIn"/></feMerge>
+    </filter>
+    <filter id="f-goo-blood" x="-15%" y="-15%" width="130%" height="140%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2.4" result="b"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" seed="9" result="n"/>
+      <feDisplacementMap in="b" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" result="bd"/>
+      <feColorMatrix in="bd" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 16 -6" result="goo"/>
+      <feGaussianBlur in="goo" stdDeviation=".7" result="shape"/>
+      <feMorphology in="shape" operator="erode" radius="1.6" result="inner"/>
+      <feComposite in="shape" in2="inner" operator="out" result="rim"/>
+      <feFlood flood-color="#33050A" flood-opacity=".7" result="rimColor"/>
+      <feComposite in="rimColor" in2="rim" operator="in" result="rimDark"/>
+      <feGaussianBlur in="shape" stdDeviation="5" result="blurA"/>
+      <feSpecularLighting in="blurA" surfaceScale="7" specularConstant=".42" specularExponent="24" lighting-color="#ffe9e9" result="spec">
+        <fePointLight x="120" y="30" z="240"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="shape" operator="in" result="specIn"/>
+      <feMerge><feMergeNode in="shape"/><feMergeNode in="rimDark"/><feMergeNode in="specIn"/></feMerge>
+    </filter>
+    <filter id="f-goo-blood-m" x="-15%" y="-15%" width="130%" height="140%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.6" result="b"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="3" seed="9" result="n"/>
+      <feDisplacementMap in="b" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G" result="bd"/>
+      <feColorMatrix in="bd" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 16 -6" result="goo"/>
+      <feGaussianBlur in="goo" stdDeviation=".5" result="shape"/>
+      <feMorphology in="shape" operator="erode" radius="1" result="inner"/>
+      <feComposite in="shape" in2="inner" operator="out" result="rim"/>
+      <feFlood flood-color="#33050A" flood-opacity=".7" result="rimColor"/>
+      <feComposite in="rimColor" in2="rim" operator="in" result="rimDark"/>
+      <feGaussianBlur in="shape" stdDeviation="3" result="blurA"/>
+      <feSpecularLighting in="blurA" surfaceScale="4" specularConstant=".28" specularExponent="26" lighting-color="#ffe9e9" result="spec">
+        <fePointLight x="70" y="10" z="150"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="shape" operator="in" result="specIn"/>
+      <feMerge><feMergeNode in="shape"/><feMergeNode in="rimDark"/><feMergeNode in="specIn"/></feMerge>
+    </filter>
+    <filter id="f-blood-soft" x="-15%" y="-15%" width="130%" height="140%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" seed="9" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G" result="shape"/>
+      <feGaussianBlur in="shape" stdDeviation="3.5" result="blurA"/>
+      <feSpecularLighting in="blurA" surfaceScale="4" specularConstant=".07" specularExponent="34" lighting-color="#ffe4e4" result="spec">
+        <fePointLight x="120" y="30" z="240"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="shape" operator="in" result="specIn"/>
+      <feMerge><feMergeNode in="shape"/><feMergeNode in="specIn"/></feMerge>
+    </filter>
+    <filter id="f-sat" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" seed="21" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="14" xChannelSelector="R" yChannelSelector="B"/>
+    </filter>
+    <!-- mancha reutilizable para los bordes de las secciones infectadas -->
+    <symbol id="s-stain" viewBox="0 0 600 420">
+      <g filter="url(#f-blood)">
+        <path fill="url(#g-pool)" d="M300 205 c-40-120 60-140 130-100 c 60 30 90 70 70 130 c-15 50-90 80-150 65 c-70-15-130-40-135-95 c-3-40 40-60 85 0z"/>
+        <path fill="#6E121B" d="M150 215 c-40-10-70 20-55 40 c 20 25 60 10 55-40z"/>
+        <path fill="#6E121B" d="M470 150 c 30-25 70-10 60 15 c-10 25-50 20-60-15z"/>
+        <path fill="#6E121B" d="M330 300 c 8 40 6 80 4 110 c-1 10-12 10-13 0 c-2-30-4-70 9-110z"/>
+      </g>
+      <g filter="url(#f-sat)" fill="#6E121B">
+        <path d="M0-11 C3-5 5-2 5 2 A5 5 0 1 1 -5 2 C-5-2 -3-5 0-11z" transform="translate(520 300) rotate(114) scale(1.40)"/>
+        <path d="M0-11 C3-5 5-2 5 2 A5 5 0 1 1 -5 2 C-5-2 -3-5 0-11z" transform="translate(120 120) rotate(-66) scale(1.00)"/>
+        <path d="M0-11 C3-5 5-2 5 2 A5 5 0 1 1 -5 2 C-5-2 -3-5 0-11z" transform="translate(400 352) rotate(147) scale(1.70)"/>
+        <path d="M0-11 C3-5 5-2 5 2 A5 5 0 1 1 -5 2 C-5-2 -3-5 0-11z" transform="translate(560 270) rotate(105) scale(0.50)"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<a class="skip-link" href="#main">Saltar al contenido</a>
+
+<!-- ===== Navbar ===== -->
+<header class="site-header" id="site-header">
+  <nav class="nav" aria-label="Principal">
+    <a class="nav__brand" href="index.html">Mindfulness para asesinos</a>
+
+    <ul class="nav__links" id="nav-links">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="personajes.html">Personajes</a></li>
+      <li><a href="trailer.html">Tráiler</a></li>
+      <li><a href="temporadas.html">Temporadas</a></li>
+      <li><a href="quiz.html">Quiz</a></li>
+      <li><a href="galeria.html">Galería</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
+    </ul>
+
+    <a class="nav__brand nav__brand--stained" href="index.html" aria-label="Mindfulness para asesinos">
+      <span aria-hidden="true">Mindfulness para <span class="stain-word">asesinos<svg class="stain-word__drip" viewBox="0 0 6 22" aria-hidden="true"><path d="M3 0 C3 8 1.5 12 3 22" /><circle cx="3" cy="19.5" r="2.4"/></svg></span></span>
+    </a>
+
+    <button class="nav__toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Abrir menú">
+      <span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<main id="main" class="page page--contacto">
+
+  <!-- ===== CONTACTO · Consultorio de Breitner ===== -->
+  <section class="section section--contacto" id="contacto" data-stage="2" aria-labelledby="contacto-title">
+    <div class="shell contact">
+      <div class="contact__aside">
+        <p class="eyebrow reveal">Consultorio · Contacto</p>
+        <p class="exercise reveal" data-type="Antes de escribir, respirá. Después escribí. Sin nombres."><span class="exercise__num">Ejercicio 7</span><span class="exercise__text" aria-label="Antes de escribir, respirá. Después escribí. Sin nombres."></span></p>
+        <h1 class="section__title reveal" id="contacto-title">¿Tenés un problema? Hablemos antes de que lo <em class="stain-word">resuelvas</em></h1>
+        <p class="section__lead reveal">Consultas sobre el curso, sobre la serie o sobre este proyecto de clase. Respondemos en 48 horas. Si es urgente, respirá: casi nada lo es.</p>
+        <dl class="contact__ways reveal">
+          <div><dt>Ver la serie</dt><dd><a href="https://www.netflix.com/title/81554969" target="_blank" rel="noopener">Netflix · Mindfulness para asesinos</a></dd></div>
+          <div><dt>Tráiler</dt><dd><a href="https://www.youtube.com/watch?v=8umozeMUssc" target="_blank" rel="noopener">YouTube, en castellano</a></dd></div>
+          <div><dt>Los libros</dt><dd>Karsten Dusse, <em>Achtsam morden</em> (2019) y sus continuaciones</dd></div>
+          <div><dt>Horario</dt><dd>Lunes a viernes, 9 a 18. Los domingos a las 21:40 no atendemos.</dd></div>
+        </dl>
+      </div>
+
+      <form class="form reveal" id="contact-form" novalidate>
+        <div class="form__row">
+          <div class="field">
+            <label for="c-nombre">Nombre</label>
+            <input id="c-nombre" name="nombre" type="text" autocomplete="name" placeholder="Björn D." required>
+          </div>
+          <div class="field">
+            <label for="c-email">Email</label>
+            <input id="c-email" name="email" type="email" autocomplete="email" placeholder="vos@ejemplo.com" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="c-problema">Tu problema tiene nombre</label>
+          <select id="c-problema" name="problema">
+            <option value="otro">Elegí uno (o ninguno)</option>
+            <option value="vecino">Un vecino</option>
+            <option value="jefe">Un jefe</option>
+            <option value="cliente">Un cliente</option>
+            <option value="familia">Alguien de la familia</option>
+            <option value="otro">Prefiero no decirlo</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="c-mensaje">Mensaje</label>
+          <textarea id="c-mensaje" name="mensaje" placeholder="Contanos con calma. Sin detalles que después haya que negar." required minlength="10"></textarea>
+        </div>
+        <label class="form__check"><input type="checkbox" name="promesa" required><span>Prometo respirar antes de actuar. Y después de actuar, también.</span></label>
+        <div class="form__foot">
+          <button class="btn btn--primary" type="submit">Pedir turno</button>
+          <p class="form__hint" aria-live="polite">Contanos. Sin nombres, por las dudas.</p>
+        </div>
+        <div class="form__done" tabindex="-1" aria-live="assertive">
+          <p class="stamp"><small>Consultorio Breitner</small>Recibido</p>
+          <p><span data-name>R</span>espirá. Te escribimos en 48 horas. Este formulario es parte de un proyecto de clase: no envía datos a ningún servidor.</p>
+          <button class="btn btn--ghost" type="button" id="contact-again">Pedir otro turno</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+  <nav class="nextlesson" aria-label="Volver">
+    <div class="shell">
+      <a class="nextlesson__link reveal" href="index.html">
+        <span class="nextlesson__eyebrow">Mientras esperás respuesta</span>
+        <span class="nextlesson__title"><span class="nextlesson__num">01</span> Volver a respirar</span>
+        <span class="nextlesson__go">Inicio</span>
+      </a>
+    </div>
+  </nav>
+
+<footer class="footer">
+  <div class="shell">
+    <p class="footer__close reveal">Inhalá. Exhalá. <span class="stain-word">Cerrá la pestaña.</span></p>
+    <nav class="footer__links" aria-label="Pie"><a href="index.html">Inicio</a><a href="temporadas.html">Temporadas</a><a href="quiz.html">Quiz</a><a href="contacto.html">Contacto</a><a href="https://www.netflix.com/title/81554969" target="_blank" rel="noopener">Netflix</a></nav>
+    <div class="footer__row">
+      <p class="footer__brand">Mindfulness para <span class="stain-word">asesinos</span></p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/blood.js" defer></script>
+<script src="js/main.js" defer></script>
+</body>
+</html>

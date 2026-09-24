@@ -1,0 +1,1868 @@
+/* =====================================================================
+   MINDFULNESS PARA ASESINOS — styles.css
+   Sistema: ver SPEC.md §3. Tokens en :root, infección por data-stage en
+   <html>, un solo patrón de reveal, sin estilos ad hoc por bloque.
+   ===================================================================== */
+
+:root {
+  /* ---- color ---- */
+  --papel: #F3F1EA;
+  --papel-sucio: #E6E0D3;
+  --papel-manchado: #CDC3B2;
+  --humo: #3B322E;
+  --tinta: #141311;
+  --salvia: #7C8B6F;
+  --salvia-oscura: #55614B;
+  --sangre: #7A1620;
+  --sangre-densa: #5A0E16;
+  --sangre-fresca: #A32332;
+  --sangre-viva: #C93646;    /* sólo acentos de una palabra sobre fondo oscuro */
+  --gris-humo: #6F6B63;
+  --ceniza: #B8B2A6;
+
+  /* ---- infección (los valores se pisan por data-stage) ---- */
+  --bg: var(--papel);
+  --ink: var(--tinta);
+  --muted: var(--gris-humo);
+  --line: rgba(20, 19, 17, .14);
+  --surface: rgba(20, 19, 17, .04);
+  --grain: .35;
+
+  /* ---- tipografía (ratio 1.25, base 17px) ---- */
+  --font-display: "Jost", "Avenir Next", "Segoe UI", sans-serif;
+  --font-body: "Work Sans", "Segoe UI", system-ui, sans-serif;
+  --fs--1: .8rem;
+  --fs-0: 1rem;
+  --fs-1: 1.25rem;
+  --fs-2: 1.563rem;
+  --fs-3: 1.953rem;
+  --fs-4: 2.441rem;
+  --fs-5: 3.052rem;
+  --fs-hero: clamp(3rem, 8.6vw, 8.25rem);
+
+  /* ---- espacio ---- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 16px;
+  --s-4: 24px;
+  --s-5: 40px;
+  --s-6: 64px;
+  --s-7: 96px;
+  --gutter: clamp(20px, 6vw, 96px);
+  --shell-max: 1320px;
+
+  /* ---- motion ---- */
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ease-in: cubic-bezier(.55, 0, 1, .45);
+  --ease-stamp: cubic-bezier(.2, 1.4, .4, 1);
+  --t-reveal: 450ms;
+  --t-stage: 900ms;
+
+  --nav-h: 76px;
+}
+
+/* ---- etapas de la infección (cálidas, nunca gris neutro) ---- */
+html[data-stage="1"] { --bg: var(--papel-sucio); --grain: .45; }
+html[data-stage="2"] { --bg: var(--papel-manchado); --grain: .55; --line: rgba(20, 19, 17, .18); --surface: rgba(20, 19, 17, .06); }
+html[data-stage="3"] {
+  --bg: var(--humo); --ink: var(--papel); --muted: var(--ceniza);
+  --line: rgba(243, 241, 234, .16); --surface: rgba(243, 241, 234, .05); --grain: .7;
+}
+html[data-stage="4"] {
+  --bg: var(--tinta); --ink: var(--papel); --muted: var(--ceniza);
+  --line: rgba(243, 241, 234, .14); --surface: rgba(243, 241, 234, .04); --grain: .85;
+}
+
+/* =====================================================================
+   BASE
+   ===================================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-size: 17px;
+  scroll-behavior: smooth;
+  overflow-x: clip;
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-0);
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--bg);
+  overflow-x: clip;
+  transition: background-color var(--t-stage) var(--ease-out), color var(--t-stage) var(--ease-out);
+}
+
+/* Grano de papel: SVG feTurbulence en data URI, multiply, opacidad por etapa */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: var(--grain);
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .12 0 0 0 0 .1 0 0 0 0 .08 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  transition: opacity var(--t-stage) var(--ease-out);
+}
+html[data-stage="3"] body::before,
+html[data-stage="4"] body::before { mix-blend-mode: screen; opacity: calc(var(--grain) * .35); }
+
+main, .site-header, .footer { position: relative; z-index: 1; }
+
+img, svg { display: block; max-width: 100%; }
+h1, h2, h3, p, ul, ol, dl, figure { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+a { color: inherit; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+em { font-style: normal; }
+
+:focus-visible { outline: 2px solid var(--sangre-fresca); outline-offset: 4px; }
+::selection { background: var(--sangre); color: var(--papel); }
+
+.svg-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.skip-link {
+  position: fixed; top: var(--s-3); left: var(--s-3); z-index: 60;
+  padding: var(--s-2) var(--s-3); background: var(--tinta); color: var(--papel);
+  transform: translateY(-200%); transition: transform 200ms var(--ease-out);
+}
+.skip-link:focus { transform: none; }
+
+.shell {
+  width: min(var(--shell-max), calc(100% - var(--gutter) * 2));
+  margin-inline: auto;
+}
+
+/* =====================================================================
+   TIPOGRAFÍA COMPARTIDA
+   ===================================================================== */
+.eyebrow {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs--1);
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--salvia);
+}
+html[data-stage="3"] .eyebrow,
+html[data-stage="4"] .eyebrow { color: var(--salvia); }
+
+.section__title {
+  font-family: var(--font-display);
+  font-weight: 200;
+  font-size: clamp(var(--fs-4), 5.2vw, var(--fs-5));
+  line-height: 1.05;
+  letter-spacing: .01em;
+  max-width: 18ch;
+  text-wrap: balance;
+}
+.section__lead {
+  max-width: 56ch;
+  color: var(--muted);
+  font-size: var(--fs-1);
+}
+
+/* Palabra "con sangre": una por sección */
+.stain-word {
+  position: relative;
+  color: var(--sangre);
+  font-weight: 300;
+}
+.stain-word::after {
+  content: "";
+  position: absolute;
+  left: 76%; bottom: -.2em;
+  width: .085em; height: .24em;
+  background: var(--sangre);
+  border-radius: 45% 45% 50% 50% / 20% 20% 80% 80%;
+}
+/* sobre fondo oscuro el rojo seco desaparece: se usa --sangre-viva sólo ahí */
+html[data-stage="3"] .stain-word,
+html[data-stage="4"] .stain-word { color: var(--sangre-viva); }
+html[data-stage="3"] .stain-word::after,
+html[data-stage="4"] .stain-word::after,
+html[data-stage="3"] .stain-word__drip path,
+html[data-stage="4"] .stain-word__drip path { background: var(--sangre-viva); stroke: var(--sangre-viva); }
+html[data-stage="3"] .stain-word__drip circle,
+html[data-stage="4"] .stain-word__drip circle { fill: var(--sangre-viva); }
+
+[hidden] { display: none !important; }
+
+/* =====================================================================
+   REVEAL (un solo patrón)
+   ===================================================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--t-reveal) var(--ease-out), transform var(--t-reveal) var(--ease-out);
+}
+.reveal.is-visible { opacity: 1; transform: none; }
+.reveal:nth-child(2) { transition-delay: 60ms; }
+.reveal:nth-child(3) { transition-delay: 120ms; }
+.reveal:nth-child(4) { transition-delay: 180ms; }
+
+/* =====================================================================
+   LOADER
+   ===================================================================== */
+.loader {
+  position: fixed; inset: 0; z-index: 50;
+  display: grid; place-content: center; gap: var(--s-4);
+  background: var(--papel); color: var(--tinta);
+  transition: opacity 500ms var(--ease-out), visibility 500ms;
+}
+.loader__mark { width: min(520px, 80vw); overflow: visible; }
+.loader__text {
+  font-family: var(--font-display);
+  font-weight: 300; font-size: 56px; letter-spacing: .22em;
+  fill: none; stroke: var(--tinta); stroke-width: .8;
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+  animation: draw 1100ms var(--ease-out) 100ms forwards;
+}
+.loader__text { stroke-dasharray: 900; stroke-dashoffset: 900; }
+.loader__line {
+  stroke: var(--sangre); stroke-width: 1.2; stroke-linecap: round;
+  stroke-dasharray: 280; stroke-dashoffset: 280;
+  animation: draw-line 600ms var(--ease-out) 900ms forwards;
+}
+.loader__hint {
+  font-family: var(--font-display); font-size: var(--fs--1);
+  letter-spacing: .3em; text-transform: uppercase; text-align: center;
+  color: var(--gris-humo);
+}
+.is-loaded .loader { opacity: 0; visibility: hidden; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes draw-line { to { stroke-dashoffset: 0; } }
+
+/* =====================================================================
+   NAVBAR
+   ===================================================================== */
+.site-header {
+  position: fixed; inset: 0 0 auto 0; z-index: 30;
+  background: color-mix(in srgb, var(--bg) 94%, transparent);
+  border-bottom: 1px solid var(--line);
+  transition: background-color var(--t-stage) var(--ease-out), color var(--t-stage) var(--ease-out), border-color var(--t-stage);
+}
+.nav {
+  min-height: var(--nav-h);
+  width: min(var(--shell-max), calc(100% - var(--gutter) * 2));
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--s-4);
+}
+.nav__brand {
+  font-family: var(--font-display);
+  font-weight: 400; font-size: .74rem; letter-spacing: .18em;
+  text-transform: uppercase; text-decoration: none; white-space: nowrap;
+}
+.nav__brand--stained { justify-self: end; }
+.nav__brand--stained .stain-word { display: inline-block; padding-right: .2em; }
+.nav__brand--stained .stain-word::after { display: none; }
+.stain-word__drip {
+  position: absolute; left: 82%; top: 70%; width: .42em; height: auto;
+  overflow: visible;
+}
+.stain-word__drip path { fill: none; stroke: var(--sangre); stroke-width: 1.2; stroke-linecap: round; }
+.stain-word__drip circle { fill: var(--sangre); }
+
+.nav__links { display: flex; gap: clamp(var(--s-3), 2.4vw, var(--s-5)); }
+.nav__links a {
+  position: relative; display: block; padding: var(--s-2) 0;
+  font-size: var(--fs--1); font-weight: 500; letter-spacing: .04em; text-decoration: none;
+}
+.nav__links a::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
+  background: var(--sangre); transform: scaleX(0); transform-origin: right;
+  transition: transform 350ms var(--ease-out);
+}
+.nav__links a:hover::after, .nav__links a.is-active::after { transform: scaleX(1); transform-origin: left; }
+
+.nav__toggle { display: none; }
+
+/* =====================================================================
+   HERO
+   ===================================================================== */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  align-items: center;
+  padding: calc(var(--nav-h) + var(--s-6)) 0 var(--s-6);
+  overflow: hidden;
+  isolation: isolate;
+}
+.hero__grid { display: grid; gap: var(--s-4); position: relative; z-index: 1; }
+
+.hero__title {
+  position: relative;
+  display: inline-block;
+  width: max-content;
+  max-width: 100%;
+  margin-top: var(--s-2);
+  font-family: var(--font-display);
+  font-weight: 200;
+  font-size: var(--fs-hero);
+  line-height: .96;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+.hero__line { display: block; }
+.hero__line--2 { font-weight: 300; letter-spacing: .12em; }
+.hero__target { position: relative; display: inline-block; }
+
+/* Gota: nace arriba de la última S y cae sobre ella */
+.blood-drip {
+  position: absolute;
+  right: .36em;            /* centrada sobre la S final */
+  top: calc(var(--drip-start, -46vh));   /* blood.js la ajusta para nacer bajo la navbar */
+  width: .12em;
+  height: calc(var(--drip-len, 46vh) + 1.05em);
+  overflow: visible;
+  pointer-events: none;
+}
+.blood-drip__path {
+  fill: none; stroke: var(--sangre); stroke-width: 4; stroke-linecap: round;
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+}
+.blood-drip__bulb { fill: var(--sangre); opacity: 0; transform-origin: 7px 396px; }
+
+.is-dripping .blood-drip__path { animation: fall 820ms var(--ease-in) forwards; }
+.is-dripping .blood-drip__bulb { animation: bulb 820ms var(--ease-in) forwards; }
+@keyframes fall { to { stroke-dashoffset: 0; } }
+@keyframes bulb { 0%, 55% { opacity: 0; transform: scale(.3); } 100% { opacity: 1; transform: scale(1); } }
+
+/* Mancha: detrás del texto, multiply, nace donde cae la gota */
+.blood-stain {
+  position: absolute;
+  right: -.9em;
+  top: .58em;
+  width: 3.9em;
+  height: auto;
+  overflow: visible;
+  pointer-events: none;
+  z-index: -1;
+  mix-blend-mode: multiply;
+}
+.blood-stain__pool { transform-origin: 300px 200px; transform: scale(.04); opacity: 0; }
+.blood-stain__tongue { transform-origin: 330px 300px; transform: scaleY(0); }
+.is-stained .blood-stain__pool { animation: pool 1100ms var(--ease-out) forwards; }
+.is-stained .blood-stain__tongue { animation: tongue 1600ms var(--ease-out) 700ms forwards; }
+@keyframes pool { from { transform: scale(.04) translateY(-8px); opacity: .9; } to { transform: scale(1); opacity: 1; } }
+@keyframes tongue { to { transform: scaleY(1); } }
+
+.hero__lead {
+  max-width: 44ch;
+  font-size: var(--fs-1);
+  margin-top: var(--s-3);
+}
+.hero__meta {
+  display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-6);
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--line);
+  max-width: 720px;
+}
+.hero__meta div { display: grid; gap: 2px; }
+.hero__meta dt {
+  font-family: var(--font-display); font-size: .7rem; letter-spacing: .24em;
+  text-transform: uppercase; color: var(--muted);
+}
+.hero__meta dd { margin: 0; font-size: var(--fs-0); }
+
+.hero__scroll {
+  display: inline-flex; align-items: center; gap: var(--s-3);
+  margin-top: var(--s-5);
+  font-family: var(--font-display); font-size: .7rem; letter-spacing: .3em;
+  text-transform: uppercase; text-decoration: none; color: var(--muted);
+  width: max-content;
+}
+.hero__scroll svg { width: 12px; height: 40px; animation: nudge 2.4s var(--ease-out) infinite; }
+@keyframes nudge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+
+/* trail de gotas (JS crea nodos) */
+.hero__trail { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.hero__trail i {
+  position: absolute; width: 6px; height: 9px; margin: -4px 0 0 -3px;
+  background: var(--sangre); opacity: .45;
+  border-radius: 50% 50% 55% 55% / 40% 40% 60% 60%;
+  animation: trail-fade 600ms var(--ease-out) forwards;
+}
+@keyframes trail-fade { to { opacity: 0; transform: translateY(14px) scale(.6); } }
+
+/* =====================================================================
+   SECCIONES
+   ===================================================================== */
+.section { position: relative; scroll-margin-top: var(--nav-h); }
+.section--personajes { padding-block: 128px; }
+.section--temporadas { padding-block: 112px; }
+.section--quiz { padding-block: 96px; }
+.section--galeria { padding-block: 80px 96px; }
+
+.section__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s-4);
+  margin-bottom: var(--s-6);
+}
+@media (min-width: 900px) {
+  .section__head { grid-template-columns: 220px minmax(0, 1fr); column-gap: var(--s-6); align-items: start; }
+  .section__head .eyebrow { padding-top: .9em; }
+  .section__head .section__title { grid-column: 2; }
+  .section__head .section__lead { grid-column: 2; }
+}
+
+/* =====================================================================
+   CARRUSEL PERSONAJES
+   ===================================================================== */
+.carousel { position: relative; }
+.carousel__bar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: var(--s-4);
+}
+.carousel__count {
+  font-family: var(--font-display); font-size: var(--fs--1); letter-spacing: .24em; color: var(--muted);
+}
+.carousel__controls { display: flex; gap: var(--s-2); }
+.carousel__btn {
+  width: 48px; height: 48px; display: grid; place-items: center;
+  border: 1px solid var(--line); border-radius: 50%;
+  transition: border-color 250ms, background-color 250ms, transform 250ms var(--ease-out);
+}
+.carousel__btn svg { width: 20px; height: 20px; }
+.carousel__btn:hover { border-color: var(--sangre); background: var(--surface); }
+.carousel__btn:active { transform: scale(.94); }
+
+.carousel__track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: clamp(260px, 26vw, 340px);
+  gap: var(--s-4);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: var(--s-3) var(--s-2) var(--s-4);
+  margin-inline: calc(var(--s-2) * -1);
+  scrollbar-width: none;
+}
+.carousel__track::-webkit-scrollbar { display: none; }
+.carousel__track:focus-visible { outline-offset: -2px; }
+
+.card {
+  scroll-snap-align: start;
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: var(--s-3);
+  transform-style: preserve-3d;
+  transition: transform 300ms var(--ease-out);
+}
+/* halo rojo detrás en hover/tilt */
+.card::before {
+  content: ""; position: absolute; inset: 6% -4% auto -4%; height: 60%;
+  background: radial-gradient(ellipse at 50% 40%, rgba(122, 22, 32, .38), transparent 68%);
+  opacity: 0; transform: translateZ(-40px); transition: opacity 350ms var(--ease-out);
+  pointer-events: none; z-index: -1;
+}
+.card:hover::before, .card.is-active::before, .card:focus-within::before { opacity: 1; }
+
+.card__media {
+  position: relative; aspect-ratio: 3 / 4; overflow: hidden;
+  background: var(--salvia-oscura);
+}
+.card__media img {
+  width: 100%; height: 100%; object-fit: cover;
+  transform-origin: 50% 40%;
+}
+.card.is-active .card__media img { animation: kenburns 9s var(--ease-out) forwards; }
+@keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.08) translate(-1.5%, -1%); } }
+
+/* placeholder intencional */
+.card__ph {
+  position: absolute; inset: 0; display: none;
+  padding: var(--s-4);
+  color: var(--papel);
+  background:
+    linear-gradient(160deg, rgba(243, 241, 234, .08), transparent 55%),
+    var(--salvia-oscura);
+}
+.card__ph::after {
+  content: ""; position: absolute; inset: 0; opacity: .5; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .1 0 0 0 0 .1 0 0 0 0 .08 0 0 0 .18 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.card.is-placeholder img { visibility: hidden; }
+.card.is-placeholder .card__ph { display: block; }
+.card__ph-initial {
+  position: absolute; left: 50%; top: 46%; transform: translate(-50%, -50%);
+  font-family: var(--font-display); font-weight: 200; font-size: 7rem; line-height: 1;
+  color: rgba(243, 241, 234, .82);
+}
+.card__ph-note {
+  position: absolute; left: var(--s-4); bottom: var(--s-4);
+  font-family: var(--font-display); font-size: .68rem; letter-spacing: .2em; text-transform: uppercase;
+  color: rgba(243, 241, 234, .7);
+}
+
+.card__body { display: grid; gap: var(--s-1); padding-right: var(--s-2); }
+.card__name { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-2); line-height: 1.1; }
+.card__actor { font-size: var(--fs--1); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.card__role { margin-top: var(--s-2); font-weight: 500; color: var(--sangre); }
+html[data-stage="3"] .card__role, html[data-stage="4"] .card__role { color: var(--sangre-viva); }
+.card__desc { font-size: var(--fs--1); color: var(--muted); }
+
+/* =====================================================================
+   TEMPORADAS
+   ===================================================================== */
+.seasons { display: grid; gap: var(--s-7); }
+.season {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s-5);
+  align-items: center;
+}
+@media (min-width: 820px) {
+  .season { grid-template-columns: 300px minmax(0, 1fr); column-gap: var(--s-7); }
+  .season--2 { grid-template-columns: minmax(0, 1fr) 300px; }
+  .season--2 .season__poster { order: 2; }
+  .season--2 .season__body { order: 1; padding-left: var(--s-7); }
+}
+.season__num {
+  position: absolute; top: -.12em; right: 0; z-index: 0;
+  font-family: var(--font-display); font-weight: 200; font-size: clamp(6rem, 16vw, 15rem); line-height: 1;
+  color: var(--sangre); opacity: .14; pointer-events: none;
+}
+.season--2 .season__num { right: calc(300px + var(--s-7)); }
+.season__poster {
+  position: relative; z-index: 1; aspect-ratio: 2 / 3; overflow: hidden;
+  background: var(--salvia-oscura);
+  box-shadow: 0 30px 60px -30px rgba(20, 19, 17, .45);
+}
+.season__poster img { width: 100%; height: 100%; object-fit: cover; }
+.season__ph {
+  position: absolute; inset: 0; display: none; place-content: center; gap: var(--s-3);
+  text-align: center; color: var(--papel);
+  background: linear-gradient(160deg, rgba(243, 241, 234, .08), transparent 55%), var(--salvia-oscura);
+}
+.season__ph span { font-family: var(--font-display); font-weight: 200; font-size: 6rem; line-height: 1; }
+.season__ph small { display: block; padding: 0 var(--s-4); font-family: var(--font-display); font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; opacity: .75; }
+.season.is-placeholder img { visibility: hidden; }
+.season.is-placeholder .season__ph { display: grid; }
+
+.season__body { position: relative; z-index: 1; display: grid; gap: var(--s-3); max-width: 58ch; }
+.season__meta { display: flex; gap: var(--s-4); font-family: var(--font-display); font-size: var(--fs--1); letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+.season__title { font-family: var(--font-display); font-weight: 200; font-size: var(--fs-4); line-height: 1.05; }
+.season__lessons {
+  display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-4);
+  margin-top: var(--s-2); padding-top: var(--s-3); border-top: 1px solid var(--line);
+  font-family: var(--font-display); font-size: var(--fs--1); letter-spacing: .16em; text-transform: uppercase;
+  counter-reset: lesson;
+}
+.season__lessons li { counter-increment: lesson; }
+.season__lessons li::before { content: counter(lesson, decimal-leading-zero) " "; color: var(--sangre); margin-right: .3em; }
+
+/* =====================================================================
+   QUIZ
+   ===================================================================== */
+.quiz__grid { display: grid; gap: var(--s-6); }
+@media (min-width: 980px) {
+  .quiz__grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: var(--s-7); align-items: start; }
+  .section__head--quiz { grid-template-columns: minmax(0, 1fr); margin-bottom: 0; position: sticky; top: calc(var(--nav-h) + var(--s-5)); }
+  .section__head--quiz .section__title, .section__head--quiz .section__lead { grid-column: 1; }
+  .section__head--quiz .eyebrow { padding-top: 0; }
+}
+
+.quiz {
+  position: relative;
+  padding: var(--s-5);
+  background: var(--papel);
+  color: var(--tinta);
+  box-shadow: 10px 10px 0 var(--sangre-densa);
+  overflow: hidden;
+}
+.quiz__top { display: grid; gap: var(--s-2); margin-bottom: var(--s-5); }
+.quiz__step { font-family: var(--font-display); font-size: var(--fs--1); letter-spacing: .22em; text-transform: uppercase; color: var(--gris-humo); }
+.quiz__progress { height: 3px; background: rgba(20, 19, 17, .12); }
+.quiz__progress-bar {
+  display: block; height: 100%; width: 100%; background: var(--sangre);
+  transform: scaleX(0); transform-origin: left; transition: transform 500ms var(--ease-out);
+}
+
+.quiz__viewport { overflow: hidden; }
+.quiz__slide { display: grid; gap: var(--s-4); }
+.quiz__slide.is-leaving { animation: slide-out 260ms var(--ease-in) forwards; }
+.quiz__slide.is-entering { animation: slide-in 420ms var(--ease-out) forwards; }
+@keyframes slide-out { to { opacity: 0; transform: translateX(-32px); } }
+@keyframes slide-in { from { opacity: 0; transform: translateX(32px); } to { opacity: 1; transform: none; } }
+
+.quiz__q { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-2); line-height: 1.2; text-wrap: balance; }
+.quiz__options { display: grid; gap: var(--s-2); }
+.quiz__opt {
+  display: grid; grid-template-columns: 32px 1fr; align-items: baseline; gap: var(--s-3);
+  width: 100%; text-align: left; padding: var(--s-3) var(--s-4);
+  border: 1px solid rgba(20, 19, 17, .18);
+  transition: border-color 200ms, background-color 200ms, transform 200ms var(--ease-out);
+}
+.quiz__opt b { font-family: var(--font-display); font-weight: 400; font-size: var(--fs--1); letter-spacing: .1em; color: var(--sangre); }
+.quiz__opt:hover, .quiz__opt:focus-visible { border-color: var(--sangre); background: rgba(122, 22, 32, .05); }
+.quiz__opt:active { transform: scale(.985); }
+
+/* resultado */
+.quiz__result { position: relative; display: grid; gap: var(--s-4); padding-top: var(--s-3); }
+.quiz__result-stain {
+  position: absolute; width: 260px; right: -70px; bottom: -90px; z-index: 0;
+  opacity: 0; transform: scale(.2); transform-origin: 55% 45%;
+  mix-blend-mode: multiply;
+}
+.quiz__result.is-stamped .quiz__result-stain { animation: pool 900ms var(--ease-out) 120ms forwards; }
+.quiz__stamp {
+  position: relative; z-index: 1; width: max-content; max-width: 100%;
+  padding: var(--s-3) var(--s-4);
+  border: 3px solid var(--sangre); color: var(--sangre);
+  transform: rotate(-4deg); transform-origin: center;
+  opacity: 0;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 5 -1.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 5 -1.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.quiz__result.is-stamped .quiz__stamp { animation: stamp 220ms var(--ease-stamp) forwards, shake 240ms linear 220ms; }
+@keyframes stamp { from { opacity: 0; transform: rotate(-4deg) scale(2.4); } 70% { opacity: 1; } to { opacity: 1; transform: rotate(-4deg) scale(1); } }
+@keyframes shake {
+  0%, 100% { translate: 0 0; } 20% { translate: -3px 2px; } 40% { translate: 3px -1px; } 60% { translate: -2px -2px; } 80% { translate: 2px 1px; }
+}
+.quiz__stamp-label { font-family: var(--font-display); font-size: .68rem; letter-spacing: .3em; text-transform: uppercase; }
+.quiz__stamp-title { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-3); line-height: 1.05; text-transform: uppercase; letter-spacing: .04em; }
+.quiz__stamp-score { font-family: var(--font-display); font-size: var(--fs--1); letter-spacing: .2em; text-transform: uppercase; margin-top: var(--s-1); }
+.quiz__result-text { position: relative; z-index: 1; max-width: 46ch; padding-right: var(--s-5); font-size: var(--fs-1); }
+
+.btn {
+  position: relative; z-index: 1;
+  width: max-content; padding: var(--s-3) var(--s-5);
+  font-family: var(--font-display); font-size: var(--fs--1); letter-spacing: .2em; text-transform: uppercase;
+  color: var(--papel); background: var(--tinta);
+  transition: background-color 200ms, transform 200ms var(--ease-out);
+}
+.btn:hover { background: var(--sangre); }
+.btn:active { transform: scale(.97); }
+
+/* =====================================================================
+   GALERÍA
+   ===================================================================== */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: minmax(160px, 22vw);
+  grid-auto-flow: dense;
+  gap: var(--s-3);
+}
+@media (min-width: 760px) {
+  .gallery { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: minmax(200px, 16vw); gap: var(--s-4); }
+  .gallery__item--wide { grid-column: span 2; }
+  .gallery__item--tall { grid-row: span 2; }
+}
+.gallery__item { position: relative; overflow: hidden; background: var(--salvia-oscura); }
+.gallery__btn { display: block; width: 100%; height: 100%; position: relative; }
+.gallery__btn img { width: 100%; height: 100%; object-fit: cover; transition: transform 600ms var(--ease-out), filter 400ms; }
+.gallery__btn:hover img { transform: scale(1.04); }
+.gallery__btn::after {
+  content: ""; position: absolute; inset: 0; border: 1px solid transparent;
+  transition: border-color 250ms; pointer-events: none;
+}
+.gallery__btn:hover::after, .gallery__btn:focus-visible::after { border-color: var(--sangre-fresca); }
+.gallery__ph {
+  position: absolute; inset: 0; display: none; place-items: center;
+  font-family: var(--font-display); font-weight: 200; font-size: 4rem; color: rgba(243, 241, 234, .75);
+  background: linear-gradient(160deg, rgba(243, 241, 234, .08), transparent 55%), var(--salvia-oscura);
+}
+.gallery__item.is-placeholder img { visibility: hidden; }
+.gallery__item.is-placeholder .gallery__ph { display: grid; }
+
+/* =====================================================================
+   LIGHTBOX
+   ===================================================================== */
+.lightbox {
+  position: fixed; inset: 0; width: 100vw; height: 100vh; max-width: none; max-height: none;
+  margin: 0; padding: var(--s-5); border: 0;
+  background: rgba(20, 19, 17, .92); color: var(--papel);
+  display: grid; grid-template-columns: 56px minmax(0, 1fr) 56px; align-items: center; gap: var(--s-3);
+  opacity: 0; transition: opacity 300ms var(--ease-out);
+}
+.lightbox:not([open]) { display: none; }
+.lightbox.is-open { opacity: 1; }
+.lightbox::backdrop { background: transparent; }
+.lightbox__figure { display: grid; gap: var(--s-3); justify-items: center; }
+.lightbox__frame {
+  position: relative; width: min(100%, 1100px, calc((100vh - 180px) * 1.5)); aspect-ratio: 3 / 2; overflow: hidden;
+  background: var(--salvia-oscura);
+  transform: scale(.94); transition: transform 350ms var(--ease-out);
+}
+.lightbox.is-open .lightbox__frame { transform: none; }
+.lightbox__frame img { width: 100%; height: 100%; object-fit: cover; }
+.lightbox__frame.is-placeholder img { visibility: hidden; }
+.lightbox__ph {
+  position: absolute; inset: 0; display: none; place-items: center;
+  font-family: var(--font-display); font-weight: 200; font-size: 6rem; color: rgba(243, 241, 234, .75);
+}
+.lightbox__frame.is-placeholder .lightbox__ph { display: grid; }
+.lightbox__caption { font-family: var(--font-display); font-size: var(--fs--1); letter-spacing: .2em; text-transform: uppercase; color: var(--ceniza); }
+.lightbox__close {
+  position: absolute; top: var(--s-4); right: var(--s-4); width: 48px; height: 48px;
+  display: grid; place-items: center; border: 1px solid rgba(243, 241, 234, .3); border-radius: 50%;
+}
+.lightbox__close svg, .lightbox__nav svg { width: 22px; height: 22px; }
+.lightbox__nav {
+  width: 56px; height: 56px; display: grid; place-items: center;
+  border: 1px solid rgba(243, 241, 234, .3); border-radius: 50%;
+  transition: border-color 200ms, background-color 200ms;
+}
+.lightbox__nav:hover, .lightbox__close:hover { border-color: var(--sangre-fresca); background: rgba(122, 22, 32, .3); }
+
+/* =====================================================================
+   FOOTER
+   ===================================================================== */
+.footer { padding: var(--s-5) 0 var(--s-6); border-top: 1px solid var(--line); }
+.footer__row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s-3); font-size: var(--fs--1); color: var(--muted); }
+.footer__brand { font-family: var(--font-display); letter-spacing: .18em; text-transform: uppercase; color: var(--ink); }
+.footer__brand .stain-word::after { display: none; }
+
+/* =====================================================================
+   RESPONSIVE
+   ===================================================================== */
+@media (max-width: 900px) {
+  :root { --nav-h: 64px; }
+  .nav { grid-template-columns: 1fr auto; }
+  .nav__brand--stained { display: none; }
+  .nav__toggle {
+    display: grid; gap: 6px; width: 44px; height: 44px; place-content: center; justify-self: end;
+  }
+  .nav__toggle span { display: block; width: 24px; height: 1.5px; background: currentColor; transition: transform 300ms var(--ease-out); }
+  .nav__toggle[aria-expanded="true"] span:first-child { transform: translateY(3.75px) rotate(45deg); }
+  .nav__toggle[aria-expanded="true"] span:last-child { transform: translateY(-3.75px) rotate(-45deg); }
+  .nav__links {
+    position: fixed; inset: var(--nav-h) 0 0 0; z-index: 29;
+    flex-direction: column; align-items: flex-start; gap: var(--s-4);
+    padding: var(--s-6) var(--gutter);
+    background: var(--bg); color: var(--ink);
+    transform: translateX(100%); transition: transform 400ms var(--ease-out);
+  }
+  .nav__links.is-open { transform: none; }
+  .nav__links a { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-3); letter-spacing: .04em; padding: var(--s-2) 0; }
+
+  .hero { padding-bottom: var(--s-5); }
+  .hero__title { letter-spacing: .05em; }
+  .blood-stain { width: 3.4em; right: -.6em; }
+
+  .section--personajes { padding-block: 96px; }
+  .section--temporadas { padding-block: 88px; }
+  .section--quiz { padding-block: 72px; }
+  .section--galeria { padding-block: 64px 80px; }
+  .section__head { margin-bottom: var(--s-5); }
+  .seasons { gap: var(--s-6); }
+  .season__poster { max-width: 260px; }
+  .season__num { font-size: 7rem; top: -.25em; left: auto; right: 0; }
+  .season--2 .season__num { right: 0; }
+  .quiz { padding: var(--s-4); box-shadow: 6px 6px 0 var(--sangre-densa); }
+  .lightbox { padding: var(--s-3); grid-template-columns: 1fr; }
+  .lightbox__nav { position: absolute; bottom: var(--s-4); }
+  .lightbox__nav--prev { left: var(--s-4); }
+  .lightbox__nav--next { right: var(--s-4); }
+  .lightbox__frame { aspect-ratio: 4 / 3; }
+}
+
+@media (max-width: 480px) {
+  :root { --fs-hero: clamp(1.9rem, 9.4vw, 2.4rem); }
+  .hero__grid { min-width: 0; }
+  .hero__title { width: fit-content; letter-spacing: .03em; }
+  .hero__line--2 { letter-spacing: .06em; }
+  .blood-stain { width: 3.2em; right: -.4em; top: .7em; }
+  .hero__meta { gap: var(--s-3) var(--s-4); }
+  .carousel__track { grid-auto-columns: 82vw; }
+  .card__ph-initial { font-size: 8rem; }
+  .quiz__opt { grid-template-columns: 24px 1fr; padding: var(--s-3); }
+}
+
+/* =====================================================================
+   REDUCED MOTION
+   ===================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: 200ms !important; }
+  .loader { display: none; }
+  .blood-drip { display: none; }
+  .blood-stain__pool { transform: scale(1); opacity: 1; }
+  .blood-stain__tongue { transform: scaleY(1); }
+  .reveal { transform: none; }
+  .card.is-active .card__media img { animation: none; }
+  .hero__trail { display: none; }
+  .hero__scroll svg { animation: none; }
+}
+
+/* =====================================================================
+   CAPA 2 — detalles que refuerzan el concepto
+   ===================================================================== */
+
+/* ---- círculo de respiración (hero) ---- */
+.breath {
+  position: absolute; z-index: 0; pointer-events: none;
+  right: clamp(24px, 7vw, 120px); top: 50%;
+  width: min(34vw, 460px); aspect-ratio: 1;
+  transform: translateY(-52%);
+  display: grid; place-items: center;
+}
+.breath__ring {
+  position: absolute; inset: 0; border-radius: 50%;
+  border: 1px solid var(--salvia); opacity: .55;
+  animation: breathe 8s ease-in-out infinite;
+}
+.breath__ring--inner { inset: 18%; opacity: .35; animation-delay: -.6s; }
+.breath__label {
+  position: absolute; bottom: -2.2em;
+  font-family: var(--font-display); font-size: .7rem; letter-spacing: .34em; text-transform: uppercase;
+  color: var(--salvia); opacity: 0;
+}
+.breath__label--in { animation: label-in 8s ease-in-out infinite; }
+.breath__label--out { animation: label-out 8s ease-in-out infinite; }
+@keyframes breathe { 0%, 100% { transform: scale(.86); } 50% { transform: scale(1); } }
+@keyframes label-in { 0%, 5% { opacity: 0; } 15%, 40% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes label-out { 0%, 55% { opacity: 0; } 65%, 90% { opacity: 1; } 100% { opacity: 0; } }
+@media (max-width: 900px) { .breath { display: none; } }
+
+/* ---- navbar: línea de infección (progreso de lectura) + gota que crece ---- */
+.site-header::after {
+  content: ""; position: absolute; left: 0; bottom: -1px; height: 2px; width: 100%;
+  background: var(--sangre); transform: scaleX(var(--progress, 0)); transform-origin: left;
+  transition: transform 120ms linear;
+}
+html[data-stage="3"] .site-header::after,
+html[data-stage="4"] .site-header::after { background: var(--sangre-viva); }
+.stain-word__drip { transform-origin: 50% 0; transition: transform var(--t-stage) var(--ease-out); }
+html[data-stage="1"] .nav__brand--stained .stain-word__drip { transform: scaleY(1.4); }
+html[data-stage="2"] .nav__brand--stained .stain-word__drip { transform: scaleY(1.9); }
+html[data-stage="3"] .nav__brand--stained .stain-word__drip { transform: scaleY(2.5); }
+html[data-stage="4"] .nav__brand--stained .stain-word__drip { transform: scaleY(3.2); }
+
+/* ---- mantras de Breitner entre secciones ---- */
+.mantra {
+  margin-top: var(--s-7);
+  padding-left: var(--s-4);
+  border-left: 1px solid var(--sangre);
+  max-width: 44ch;
+}
+@media (min-width: 900px) { .mantra { margin-left: calc(220px + var(--s-6)); } }
+.mantra p {
+  font-family: var(--font-display); font-weight: 300; font-size: var(--fs-2); line-height: 1.3;
+  text-wrap: pretty;
+}
+.mantra cite {
+  display: block; margin-top: var(--s-3);
+  font-style: normal; font-family: var(--font-display); font-size: var(--fs--1);
+  letter-spacing: .22em; text-transform: uppercase; color: var(--muted);
+}
+.mantra .stain-word::after { bottom: -.16em; }
+
+/* ---- temporadas: barras de episodios que se manchan ---- */
+.season__eps {
+  display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px;
+  max-width: 260px; margin-top: calc(var(--s-2) * -1);
+}
+.season__eps li { position: relative; height: 3px; background: var(--line); }
+.season__eps li[data-stained] { background: var(--sangre); }
+.season__eps li[data-stained]::after {
+  content: ""; position: absolute; left: 45%; top: 3px; width: 3px; height: 7px;
+  background: var(--sangre); border-radius: 0 0 50% 50% / 0 0 70% 70%;
+}
+
+/* ---- quiz: feedback del coach por respuesta ---- */
+.quiz__opt.is-chosen { border-color: var(--sangre); background: var(--sangre); color: var(--papel); }
+.quiz__opt.is-chosen b { color: var(--papel); }
+.quiz__note {
+  font-family: var(--font-display); font-size: var(--fs--1); letter-spacing: .18em; text-transform: uppercase;
+  color: var(--sangre); min-height: 1.4em;
+  opacity: 0; transform: translateY(6px); transition: opacity 250ms var(--ease-out), transform 250ms var(--ease-out);
+}
+.quiz__note.is-on { opacity: 1; transform: none; }
+
+/* ---- manchas de borde: se acumulan a medida que la página se infecta ---- */
+.edge-stain {
+  position: absolute; z-index: 0; pointer-events: none; overflow: visible;
+  fill: var(--sangre); mix-blend-mode: multiply; opacity: .9;
+}
+html[data-stage="3"] .edge-stain, html[data-stage="4"] .edge-stain,
+.section--quiz .edge-stain, .section--galeria .edge-stain { mix-blend-mode: normal; fill: var(--sangre-densa); opacity: .95; }
+.edge-stain--a { width: 150px; height: 105px; right: -40px; bottom: 40px; transform: rotate(160deg); }
+.edge-stain--b { width: 210px; height: 147px; left: -70px; top: 120px; transform: rotate(-25deg); }
+.edge-stain--c { width: 120px; height: 84px; right: 30px; bottom: -20px; transform: rotate(80deg); }
+.edge-stain--d { width: 260px; height: 182px; left: -110px; top: 300px; transform: rotate(15deg); }
+.edge-stain--e { width: 160px; height: 112px; right: -30px; top: 300px; transform: rotate(-140deg); }
+.edge-stain--f { width: 320px; height: 224px; right: 8%; bottom: -60px; transform: rotate(200deg); }
+@media (max-width: 900px) {
+  .edge-stain { transform: scale(.65) rotate(0deg); }
+  .edge-stain--d, .edge-stain--f { display: none; }
+}
+
+/* ---- galería: leyenda al hover ---- */
+.gallery__btn::before {
+  content: attr(data-cap); position: absolute; left: 0; right: 0; bottom: 0; z-index: 1;
+  padding: var(--s-2) var(--s-3);
+  font-family: var(--font-display); font-size: .68rem; letter-spacing: .24em; text-transform: uppercase;
+  color: var(--papel); background: linear-gradient(to top, rgba(20, 19, 17, .7), transparent);
+  transform: translateY(100%); transition: transform 350ms var(--ease-out);
+}
+.gallery__btn:hover::before, .gallery__btn:focus-visible::before { transform: none; }
+
+/* ---- footer: cierre ---- */
+.footer__close {
+  font-family: var(--font-display); font-weight: 200; font-size: var(--fs-3); line-height: 1.1;
+  margin-bottom: var(--s-6);
+}
+.footer__close .stain-word::after { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .breath__ring, .breath__label { animation: none; }
+  .breath__label--in { opacity: 1; }
+}
+
+/* Los filtros SVG se rasterizan una vez por capa: evita repintar en cada frame de transición */
+.edge-stain, .blood-stain, .quiz__result-stain, .blood-drip { will-change: transform; }
+
+/* Trail del hero, un poco más presente */
+.hero__trail i { width: 8px; height: 12px; margin: -6px 0 0 -4px; opacity: .7; animation-duration: 950ms; }
+@keyframes trail-fade { 60% { opacity: .55; } to { opacity: 0; transform: translateY(26px) scale(.55); } }
+@media (min-width: 901px) { .blood-stain { width: 4.4em; right: -1.15em; top: .5em; } }
+
+/* Sangre realista: las capas de color ya vienen del gradiente y el filtro; el borde y los satélites no se pintan aparte */
+.blood-stain__tongue--2 { transform-origin: 255px 285px; }
+.is-stained .blood-stain__tongue--2 { animation-delay: 1000ms; animation-duration: 1300ms; }
+.edge-stain { fill: none; }
+.section--quiz .edge-stain, .section--galeria .edge-stain, html[data-stage="3"] .edge-stain, html[data-stage="4"] .edge-stain { fill: none; opacity: .9; }
+
+/* ---- sangre simulada (canvas) ---- */
+.blood-canvas {
+  position: absolute;
+  right: -1.9em; top: -.95em;
+  width: 5.8em; height: 3.6em;
+  pointer-events: none; z-index: -1;
+  mix-blend-mode: multiply;
+  filter: url(#f-goo-blood);
+  will-change: transform;
+}
+@media (max-width: 900px) { .blood-canvas { right: -2.3em; top: -.9em; width: 6.2em; height: 3.4em; filter: url(#f-goo-blood-m); } }
+
+/* =====================================================================
+   TRÁILER (la pantalla salpica hacia la página)
+   ===================================================================== */
+.section--trailer { padding-block: 112px; }
+.trailer { position: relative; }
+.trailer__frame {
+  position: relative; aspect-ratio: 16 / 9; width: min(100%, 1040px);
+  background: var(--tinta); overflow: hidden;
+  box-shadow: 0 40px 80px -40px rgba(20, 19, 17, .55);
+}
+.trailer__frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.trailer__poster {
+  position: absolute; inset: 0; width: 100%; height: 100%; display: grid; place-items: center; z-index: 2;
+  color: var(--papel); transition: opacity 400ms var(--ease-out);
+}
+.trailer__poster img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(.7) brightness(.72); transition: transform 8s var(--ease-out), filter 600ms; }
+.trailer__poster:hover img, .trailer__poster:focus-visible img { transform: scale(1.04); filter: saturate(.85) brightness(.8); }
+.trailer__play {
+  position: relative; z-index: 1; width: 88px; height: 88px; display: grid; place-items: center;
+  border: 1px solid rgba(243, 241, 234, .7); border-radius: 50%;
+  background: rgba(20, 19, 17, .35); transition: background-color 250ms, transform 250ms var(--ease-out);
+}
+.trailer__play svg { width: 34px; height: 34px; margin-left: 4px; }
+.trailer__poster:hover .trailer__play { background: var(--sangre); transform: scale(1.06); }
+.trailer__cta {
+  position: absolute; bottom: var(--s-4); left: 50%; transform: translateX(-50%); z-index: 1;
+  font-family: var(--font-display); font-size: var(--fs--1); letter-spacing: .3em; text-transform: uppercase;
+}
+.trailer.is-playing .trailer__poster { opacity: 0; pointer-events: none; }
+.trailer__blood {
+  position: absolute; left: -18%; top: -22%; width: 136%; height: 152%;
+  pointer-events: none; z-index: 3;
+  mix-blend-mode: multiply; filter: url(#f-goo-blood); will-change: transform;
+}
+html[data-stage="3"] .trailer__blood, html[data-stage="4"] .trailer__blood { mix-blend-mode: normal; }
+.trailer__note { margin-top: var(--s-3); font-size: var(--fs--1); color: var(--muted); }
+.trailer__note a { color: var(--sangre); }
+@media (max-width: 900px) {
+  .section--trailer { padding-block: 88px; }
+  .trailer__blood { left: -10%; top: -14%; width: 120%; height: 134%; filter: url(#f-goo-blood-m); }
+  .trailer__play { width: 64px; height: 64px; }
+}
+
+/* =====================================================================
+   HERO: PANTALLA 3D (el tráiler adentro, la sangre sale hacia afuera)
+   ===================================================================== */
+.breath { display: none; }
+.screen {
+  position: absolute; z-index: 0; pointer-events: none;
+  right: clamp(16px, 6vw, 96px); top: 67%;
+  width: min(38vw, 540px);
+  transform: translateY(-50%);
+  perspective: 1400px;
+}
+.screen__plane {
+  position: relative; aspect-ratio: 16 / 9; overflow: hidden;
+  background: var(--tinta);
+  transform: rotateY(var(--ry, -16deg)) rotateX(var(--rx, 4deg));
+  transform-style: preserve-3d;
+  transition: transform 500ms var(--ease-out);
+  box-shadow: 34px 50px 90px -30px rgba(20, 19, 17, .55), 0 0 0 1px rgba(20, 19, 17, .25);
+}
+.screen__poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(.8) brightness(.85); animation: kenburns 24s var(--ease-out) infinite alternate; }
+.screen__video { position: absolute; inset: 0; }
+/* el iframe se sobredimensiona para tapar barras negras y controles */
+.screen__video iframe { position: absolute; top: 50%; left: 50%; width: 120%; height: 120%; transform: translate(-50%, -50%); border: 0; pointer-events: none; }
+.screen__glass {
+  position: absolute; inset: 0;
+  background: linear-gradient(115deg, rgba(243, 241, 234, .16), transparent 40%, transparent 70%, rgba(243, 241, 234, .06));
+  mix-blend-mode: screen; pointer-events: none;
+}
+.screen__blood {
+  position: absolute; left: -24%; top: -34%; width: 148%; height: 168%;
+  z-index: 2; pointer-events: none;
+  filter: url(#f-goo-blood); will-change: transform;
+}
+.screen__label {
+  position: absolute; left: 0; bottom: -2.4em;
+  font-family: var(--font-display); font-size: .68rem; letter-spacing: .3em; text-transform: uppercase; color: var(--muted);
+}
+/* el título va por encima del borde izquierdo de la pantalla */
+.hero__grid { z-index: 1; }
+@media (max-width: 900px) {
+  .screen {
+    position: relative; right: auto; top: auto; transform: none;
+    width: 100%; margin-top: var(--s-5);
+    --ry: -6deg; --rx: 2deg;
+  }
+  .screen__blood { left: -12%; top: -20%; width: 124%; height: 140%; filter: url(#f-goo-blood-m); }
+  .screen__label { bottom: -2em; }
+}
+@media (prefers-reduced-motion: reduce) { .screen__poster { animation: none; } }
+
+/* ---- pantalla sin marco: el video se funde con el papel (máscara de borde roto + multiply) ---- */
+.screen {
+  right: clamp(0px, 2vw, 40px); top: 62%;
+  width: min(58vw, 820px);
+  --mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'%3E%3Cdefs%3E%3Cfilter id='f' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.011 .016' numOctaves='3' seed='5' result='n'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='n' scale='90' xChannelSelector='R' yChannelSelector='G' result='d'/%3E%3CfeGaussianBlur in='d' stdDeviation='9'/%3E%3C/filter%3E%3CradialGradient id='g' cx='52%25' cy='50%25' r='62%25'%3E%3Cstop offset='.55' stop-color='%23fff'/%3E%3Cstop offset='1' stop-color='%23fff' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Cellipse cx='420' cy='225' rx='330' ry='190' fill='url(%23g)' filter='url(%23f)'/%3E%3C/svg%3E");
+}
+.screen__plane {
+  background: transparent; overflow: hidden;
+  box-shadow: none;
+  transform: rotateY(var(--ry, -9deg)) rotateX(var(--rx, 3deg));
+  -webkit-mask-image: var(--mask); mask-image: var(--mask);
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  mix-blend-mode: multiply;
+}
+.screen__glass { display: none; }
+.screen__poster { filter: saturate(.75) contrast(1.05); }
+.screen__video iframe { width: 112%; height: 112%; }
+.screen__label { left: 12%; bottom: -.6em; }
+@media (max-width: 900px) {
+  .screen { width: 118%; margin-left: -9%; margin-top: var(--s-4); --ry: -4deg; --rx: 2deg; }
+  .screen__label { left: 12%; bottom: .4em; }
+}
+
+/* mobile: el video va debajo del texto, en flujo, sin desplazamiento */
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 100%; }
+  .hero__grid { order: 1; }
+  .screen { order: 2; position: relative; right: auto; top: auto; transform: none; width: 118%; margin: var(--s-4) 0 0 -9%; }
+  .screen__label { left: 10%; bottom: .2em; }
+}
+
+/* sangre v3: espesor por gradiente, sin "goo"; el filtro sólo irregulariza el borde y da brillo tenue */
+.blood-canvas, .screen__blood, .trailer__blood { filter: url(#f-blood-soft); }
+.screen__blood { mix-blend-mode: multiply; }
+@media (max-width: 900px) { .blood-canvas, .screen__blood, .trailer__blood { filter: url(#f-blood-soft); } }
+
+/* =====================================================================
+   SITIO MULTIPÁGINA: entrada de página, índice del curso, desplegable de
+   temporadas, siguiente lección, goteo ambiental
+   ===================================================================== */
+/* entrada de página: fade corto (sin loader fuera del inicio) */
+body[data-page] main { animation: page-in 520ms var(--ease-out) both; }
+@keyframes page-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+body[data-page]:not([data-page="index"]) .hero { display: none; }
+
+/* ---- índice del curso (inicio) ---- */
+.section--indice { padding-block: 112px 128px; }
+.syllabus { display: grid; border-top: 1px solid var(--line); }
+@media (min-width: 900px) { .syllabus { margin-left: calc(220px + var(--s-6)); } }
+.syllabus__row {
+  display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; align-items: baseline; gap: var(--s-4);
+  padding: var(--s-4) 0; border-bottom: 1px solid var(--line); text-decoration: none;
+  transition: background-color 250ms;
+}
+.syllabus__num { font-family: var(--font-display); font-weight: 200; font-size: var(--fs-3); line-height: 1; color: var(--muted); transition: color 250ms; }
+.syllabus__body { display: grid; gap: var(--s-1); }
+.syllabus__title { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-2); line-height: 1.15; }
+.syllabus__desc { font-size: var(--fs--1); color: var(--muted); max-width: 52ch; }
+.syllabus__go {
+  position: relative; font-family: var(--font-display); font-size: var(--fs--1); letter-spacing: .22em; text-transform: uppercase;
+  color: var(--sangre); padding-right: 1.6em; white-space: nowrap;
+}
+.syllabus__go::after { content: "→"; position: absolute; right: 0; top: 0; transition: transform 300ms var(--ease-out); }
+.syllabus__row:hover .syllabus__num, .syllabus__row:focus-visible .syllabus__num { color: var(--sangre); }
+.syllabus__row:hover .syllabus__go::after, .syllabus__row:focus-visible .syllabus__go::after { transform: translateX(6px); }
+/* al pasar, una gota cae del número */
+.syllabus__num { position: relative; }
+.syllabus__num::after {
+  content: ""; position: absolute; left: 42%; bottom: -.15em; width: .1em; height: 0;
+  background: var(--sangre); border-radius: 0 0 50% 50% / 0 0 70% 70%; transition: height 500ms var(--ease-out);
+}
+.syllabus__row:hover .syllabus__num::after { height: .5em; }
+@media (max-width: 640px) {
+  .syllabus__row { grid-template-columns: 44px minmax(0, 1fr); }
+  .syllabus__go { grid-column: 2; }
+}
+
+/* ---- temporadas: desplegable ---- */
+.seasons-acc { display: grid; border-top: 1px solid var(--line); }
+.season-acc { border-bottom: 1px solid var(--line); }
+.season-acc__sum {
+  list-style: none; cursor: pointer;
+  display: grid; grid-template-columns: 96px minmax(0, 1fr) auto 32px; align-items: center; gap: var(--s-4);
+  padding: var(--s-4) 0;
+}
+.season-acc__sum::-webkit-details-marker { display: none; }
+.season-acc__num { font-family: var(--font-display); font-weight: 200; font-size: var(--fs-5); line-height: 1; color: var(--sangre); }
+.season-acc__title { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-3); line-height: 1.1; }
+.season-acc__meta { display: flex; gap: var(--s-4); font-family: var(--font-display); font-size: var(--fs--1); letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+.season-acc__icon { position: relative; width: 32px; height: 32px; border: 1px solid var(--line); border-radius: 50%; transition: transform 400ms var(--ease-out), border-color 250ms; }
+.season-acc__icon::before, .season-acc__icon::after { content: ""; position: absolute; left: 50%; top: 50%; background: currentColor; transform: translate(-50%, -50%); }
+.season-acc__icon::before { width: 12px; height: 1px; }
+.season-acc__icon::after { width: 1px; height: 12px; transition: transform 400ms var(--ease-out); }
+.season-acc[open] .season-acc__icon::after { transform: translate(-50%, -50%) scaleY(0); }
+.season-acc[open] .season-acc__icon, .season-acc__sum:hover .season-acc__icon { border-color: var(--sangre); }
+.season-acc__panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 520ms var(--ease-out); }
+.season-acc.is-open .season-acc__panel { grid-template-rows: 1fr; }
+.season-acc__inner { overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-5); }
+.season-acc__inner > * { margin-bottom: 0; }
+.season-acc.is-open .season-acc__inner { padding-bottom: var(--s-6); }
+@media (min-width: 820px) {
+  .season-acc__inner { grid-template-columns: 240px minmax(0, 1fr); column-gap: var(--s-7); }
+}
+.season-acc .season__poster { max-width: 240px; margin-top: var(--s-2); }
+.season-acc.is-placeholder img { visibility: hidden; }
+.season-acc.is-placeholder .season__ph { display: grid; }
+.season-acc__body { display: grid; gap: var(--s-4); max-width: 60ch; align-content: start; }
+.eps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-2) var(--s-5); border-top: 1px solid var(--line); padding-top: var(--s-4); }
+.eps li { position: relative; display: grid; grid-template-columns: 36px 1fr; align-items: baseline; gap: var(--s-2); padding: var(--s-2) 0; }
+.ep__num { font-family: var(--font-display); font-size: var(--fs--1); letter-spacing: .16em; color: var(--muted); }
+.ep__title { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-1); }
+.eps li[data-stained] .ep__num { color: var(--sangre); }
+.eps li[data-stained] .ep__title::after {
+  content: ""; display: inline-block; width: 5px; height: 9px; margin-left: 8px; vertical-align: -1px;
+  background: var(--sangre); border-radius: 50% 50% 55% 55% / 40% 40% 60% 60%;
+}
+@media (max-width: 640px) {
+  .season-acc__sum { grid-template-columns: 56px minmax(0, 1fr) 28px; }
+  .season-acc__meta { grid-column: 2; }
+  .season-acc__num { font-size: var(--fs-4); }
+  .eps { grid-template-columns: 1fr; }
+}
+
+/* ---- siguiente lección ---- */
+.nextlesson { padding-block: 0 96px; }
+.nextlesson__link {
+  display: grid; gap: var(--s-2); padding: var(--s-5) 0; border-top: 1px solid var(--line); text-decoration: none;
+}
+.nextlesson__eyebrow { font-family: var(--font-display); font-size: var(--fs--1); letter-spacing: .28em; text-transform: uppercase; color: var(--muted); }
+.nextlesson__title { font-family: var(--font-display); font-weight: 200; font-size: clamp(var(--fs-3), 4vw, var(--fs-5)); line-height: 1.05; }
+.nextlesson__num { color: var(--sangre); font-weight: 200; }
+.nextlesson__go { font-family: var(--font-display); font-size: var(--fs--1); letter-spacing: .22em; text-transform: uppercase; color: var(--sangre); transition: letter-spacing 300ms var(--ease-out); }
+.nextlesson__link:hover .nextlesson__go { letter-spacing: .32em; }
+
+/* ---- goteo ambiental: cada tanto cae una gota del logo y queda una mancha abajo ---- */
+.adrop {
+  position: fixed; z-index: 29; pointer-events: none;
+  width: 6px; height: 12px; margin-left: -3px;
+  background: var(--sangre); border-radius: 50% 50% 55% 55% / 35% 35% 65% 65%;
+  transform-origin: 50% 0;
+}
+html[data-stage="3"] .adrop, html[data-stage="4"] .adrop { background: var(--sangre-viva); }
+.astain {
+  position: fixed; bottom: 2px; z-index: 29; pointer-events: none;
+  width: 34px; height: 24px; fill: var(--sangre); filter: url(#f-sat); opacity: 0;
+  transition: opacity 500ms var(--ease-out);
+}
+.astain.is-on { opacity: .9; }
+html[data-stage="3"] .astain, html[data-stage="4"] .astain { fill: var(--sangre-densa); }
+
+/* páginas internas: la primera sección deja lugar a la navbar fija */
+body[data-page]:not([data-page="index"]) main > .section:first-child { padding-top: calc(var(--nav-h) + 96px); }
+@media (max-width: 900px) { body[data-page]:not([data-page="index"]) main > .section:first-child { padding-top: calc(var(--nav-h) + 64px); } }
+
+/* =====================================================================
+   CAPA NARRATIVA: gancho, por qué verla, ejercicios, cierre, transiciones
+   ===================================================================== */
+/* título del hero: las letras se revelan de abajo hacia arriba antes de la gota */
+.hero__word { display: inline-block; overflow: hidden; vertical-align: bottom; }
+.hero__word i { display: inline-block; font-style: normal; transform: translateY(110%); animation: letter-up 700ms var(--ease-out) forwards; }
+@keyframes letter-up { to { transform: none; } }
+.hero__target { overflow: visible; }
+
+/* CTAs */
+.hero__cta { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-2); }
+.btn--primary { background: var(--sangre); }
+.btn--primary:hover { background: var(--sangre-densa); }
+.btn--ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+.btn--ghost:hover { background: transparent; border-color: var(--sangre); color: var(--sangre); }
+html[data-stage="3"] .btn--ghost, html[data-stage="4"] .btn--ghost { color: var(--papel); }
+.quiz .btn--ghost { color: var(--tinta); border-color: rgba(20, 19, 17, .25); }
+.quiz__actions { display: flex; flex-wrap: wrap; gap: var(--s-3); position: relative; z-index: 1; }
+
+/* por qué verla: editorial a dos columnas, sin tarjetas */
+.section--porque { padding-block: 128px 32px; }
+.porque { display: grid; gap: var(--s-6); }
+@media (min-width: 900px) { .porque { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); column-gap: var(--s-7); align-items: start; } }
+.porque__lead .section__title { max-width: 16ch; }
+.porque__body { display: grid; gap: var(--s-4); max-width: 58ch; padding-top: var(--s-2); }
+.porque__body p strong { font-family: var(--font-display); font-weight: 400; letter-spacing: .06em; text-transform: uppercase; font-size: var(--fs--1); color: var(--sangre); display: block; margin-bottom: 2px; }
+.porque__fans { margin-top: var(--s-3); padding-top: var(--s-4); border-top: 1px solid var(--line); font-family: var(--font-display); font-weight: 300; font-size: var(--fs-1); }
+.porque__fans span { color: var(--sangre); font-weight: 400; }
+
+/* ejercicio de la lección: se escribe a máquina cuando entra en pantalla */
+.exercise { display: grid; grid-template-columns: auto 1fr; gap: var(--s-3); align-items: baseline; max-width: 60ch; margin-top: calc(var(--s-2) * -1); }
+.exercise__num { font-family: var(--font-display); font-size: var(--fs--1); letter-spacing: .24em; text-transform: uppercase; color: var(--sangre); white-space: nowrap; }
+.exercise__text { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-1); line-height: 1.35; min-height: 1.35em; }
+.exercise__text::after { content: "▍"; color: var(--sangre); animation: caret 900ms steps(2) infinite; }
+.exercise.is-done .exercise__text::after { content: ""; }
+@keyframes caret { 50% { opacity: 0; } }
+@media (min-width: 900px) { .section__head .exercise { grid-column: 2; } }
+
+/* personajes: el ejercicio que le tocó */
+.card__lesson { margin-top: var(--s-2); padding-top: var(--s-2); border-top: 1px solid var(--line); font-size: var(--fs--1); }
+.card__lesson span { display: block; font-family: var(--font-display); font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+
+/* listas escalonadas */
+.syllabus > li, .eps > li { opacity: 0; transform: translateY(12px); transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out); }
+.syllabus.is-visible > li, .season-acc.is-open .eps > li { opacity: 1; transform: none; }
+.syllabus > li:nth-child(1), .eps > li:nth-child(1) { transition-delay: 60ms; }
+.syllabus > li:nth-child(2), .eps > li:nth-child(2) { transition-delay: 140ms; }
+.syllabus > li:nth-child(3), .eps > li:nth-child(3) { transition-delay: 220ms; }
+.syllabus > li:nth-child(4), .eps > li:nth-child(4) { transition-delay: 300ms; }
+.syllabus > li:nth-child(5), .eps > li:nth-child(5) { transition-delay: 380ms; }
+.eps > li:nth-child(6) { transition-delay: 460ms; }
+.eps > li:nth-child(7) { transition-delay: 540ms; }
+.eps > li:nth-child(8) { transition-delay: 620ms; }
+
+/* cierre (galería) */
+.final { padding: 32px 0 128px; }
+.final__inner { display: grid; gap: var(--s-4); padding-top: var(--s-6); border-top: 1px solid var(--line); max-width: 760px; }
+.final__title { font-family: var(--font-display); font-weight: 200; font-size: clamp(var(--fs-4), 5vw, var(--fs-5)); line-height: 1.05; text-wrap: balance; }
+.final__lead { color: var(--muted); font-size: var(--fs-1); max-width: 52ch; }
+
+/* transición al salir de una página */
+body.is-leaving main, body.is-leaving .nextlesson, body.is-leaving .final { opacity: 0; transform: translateY(-8px); transition: opacity 260ms var(--ease-in), transform 260ms var(--ease-in); }
+@media (prefers-reduced-motion: reduce) {
+  .hero__word i { animation: none; transform: none; }
+  .exercise__text::after { animation: none; }
+  .syllabus > li, .eps > li { opacity: 1; transform: none; transition: none; }
+}
+
+/* =====================================================================
+   FONDO: nunca se va a negro. Las últimas lecciones son papel cada vez
+   más sucio; la infección la cuenta la sangre acumulada, no la oscuridad.
+   ===================================================================== */
+html[data-stage="3"] {
+  --bg: #CBC0AD; --ink: var(--tinta); --muted: #5E5850;
+  --line: rgba(20, 19, 17, .2); --surface: rgba(20, 19, 17, .06); --grain: .62;
+}
+html[data-stage="4"] {
+  --bg: #C3B6A1; --ink: var(--tinta); --muted: #5A5249;
+  --line: rgba(20, 19, 17, .22); --surface: rgba(20, 19, 17, .07); --grain: .7;
+}
+html[data-stage="3"] body::before, html[data-stage="4"] body::before { mix-blend-mode: multiply; opacity: var(--grain); }
+html[data-stage="3"] .stain-word, html[data-stage="4"] .stain-word { color: var(--sangre); }
+html[data-stage="3"] .stain-word::after, html[data-stage="4"] .stain-word::after { background: var(--sangre); }
+html[data-stage="3"] .stain-word__drip path, html[data-stage="4"] .stain-word__drip path { stroke: var(--sangre); }
+html[data-stage="3"] .stain-word__drip circle, html[data-stage="4"] .stain-word__drip circle { fill: var(--sangre); }
+html[data-stage="3"] .site-header::after, html[data-stage="4"] .site-header::after { background: var(--sangre); }
+html[data-stage="3"] .card__role, html[data-stage="4"] .card__role { color: var(--sangre); }
+html[data-stage="3"] .edge-stain, html[data-stage="4"] .edge-stain,
+.section--quiz .edge-stain, .section--galeria .edge-stain { mix-blend-mode: multiply; fill: var(--sangre); opacity: .9; }
+html[data-stage="3"] .adrop, html[data-stage="4"] .adrop { background: var(--sangre); }
+html[data-stage="3"] .astain, html[data-stage="4"] .astain { fill: var(--sangre); }
+html[data-stage="3"] .btn--ghost, html[data-stage="4"] .btn--ghost { color: var(--ink); }
+html[data-stage="3"] .trailer__blood, html[data-stage="4"] .trailer__blood { mix-blend-mode: multiply; }
+/* el quiz ya no necesita tarjeta blanca sobre negro: se apoya en el papel con borde */
+.quiz { background: rgba(243, 241, 234, .55); box-shadow: 8px 8px 0 var(--sangre); border: 1px solid rgba(20, 19, 17, .18); }
+/* galería sobre papel: marcos finos */
+.gallery__item { box-shadow: 0 1px 0 rgba(20, 19, 17, .15); }
+
+/* =====================================================================
+   V4 · TIPOGRAFÍA DE LA SERIE + HERO COMO EL PÓSTER + FONDO CON CAPAS
+   El logo oficial es una grotesca geométrica extra-negra: "MINDFULNESS"
+   blanco con halo luminoso, "ASESINOS" rojo pesado. Montserrat Black es el
+   sustituto libre más cercano. Jost sigue para los títulos de sección
+   (la voz calma del curso) y Work Sans para el cuerpo.
+   ===================================================================== */
+:root { --font-logo: "Montserrat", "Arial Black", "Segoe UI", sans-serif; --rojo-logo: #C0161C; }
+
+/* marca en navbar y footer */
+.nav__brand, .footer__brand { font-family: var(--font-logo); font-weight: 800; font-size: .72rem; letter-spacing: .06em; }
+.nav__brand .stain-word, .footer__brand .stain-word { font-weight: 900; color: var(--rojo-logo); }
+.nav__brand--stained .stain-word__drip path { stroke: var(--rojo-logo); }
+.nav__brand--stained .stain-word__drip circle { fill: var(--rojo-logo); }
+
+/* ---- hero: el video es el fondo, fundido al papel abajo ---- */
+.hero { min-height: 100svh; padding: 0; display: grid; align-items: end; isolation: isolate; }
+.hero .screen {
+  position: absolute; inset: 0; width: auto; height: auto; transform: none; margin: 0; perspective: none; z-index: 0;
+  --mask: linear-gradient(to bottom, #000 0%, #000 36%, rgba(0,0,0,.5) 52%, transparent 68%);
+}
+.hero .screen__plane {
+  position: absolute; inset: 0; aspect-ratio: auto; transform: none !important; mix-blend-mode: normal;
+  -webkit-mask-image: var(--mask); mask-image: var(--mask);
+}
+.hero .screen__plane::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to right, rgba(20, 19, 17, .28), rgba(20, 19, 17, .05) 45%, rgba(20, 19, 17, .32)); }
+.hero .screen__poster { filter: saturate(.85); }
+.hero .screen__video iframe { width: 178vh; height: 100%; min-width: 100%; min-height: 56.25vw; }
+.hero .screen__label { left: auto; right: var(--gutter); top: calc(var(--nav-h) + 12px); bottom: auto; color: rgba(243, 241, 234, .85); z-index: 2; }
+.hero .screen__blood { left: 0; top: 0; width: 100%; height: 100%; mix-blend-mode: normal; }
+.hero__grid { position: relative; z-index: 2; padding-top: calc(var(--nav-h) + 8vh); gap: 0; }
+.hero__grid > .eyebrow { color: rgba(243, 241, 234, .9); text-shadow: 0 1px 12px rgba(20, 19, 17, .5); margin-bottom: var(--s-3); }
+
+/* título como el póster */
+.hero__title {
+  font-family: var(--font-logo); font-weight: 900; text-transform: uppercase; letter-spacing: -.005em; line-height: .92;
+  font-size: clamp(2.6rem, 8.8vw, 8.6rem); width: fit-content; max-width: 100%; margin: 0 0 9vh;
+}
+.hero__line--glow { color: #fff; text-shadow: 0 0 14px rgba(255, 255, 255, .95), 0 0 34px rgba(255, 255, 255, .7), 0 0 70px rgba(255, 255, 255, .45); }
+.hero__line--para { display: block; font-size: .27em; letter-spacing: .12em; margin: .18em 0 .1em .12em; color: #fff; text-shadow: 0 0 10px rgba(255, 255, 255, .8); font-weight: 800; }
+.hero__line--red { color: var(--rojo-logo); text-shadow: 0 2px 0 rgba(90, 8, 12, .35), 0 12px 30px rgba(20, 19, 17, .25); letter-spacing: -.01em; }
+.hero__word { overflow: hidden; }
+.hero__word i { font-style: normal; }
+.hero__target { overflow: visible; }
+
+/* gota y mancha: apuntan a la S de ASESINOS (Montserrat es más ancha: se recalibra) */
+.blood-drip { right: .3em; width: .1em; }
+.blood-canvas { right: -1.7em; top: -.6em; width: 5.6em; height: 3.2em; }
+
+/* panel de texto sobre papel */
+.hero__panel { display: grid; gap: var(--s-4); padding-bottom: var(--s-6); max-width: 720px; position: relative; }
+.hero__panel::before { content: ""; position: absolute; inset: -40px -60px -20px -60px; z-index: -1; background: radial-gradient(70% 60% at 30% 40%, rgba(243, 241, 234, .85), transparent 75%); pointer-events: none; }
+.hero__lead { margin-top: 0; }
+.hero__meta { padding-top: var(--s-3); }
+.hero__scroll { margin-top: var(--s-2); }
+
+@media (max-width: 900px) {
+  .hero { min-height: auto; }
+  .hero .screen { position: absolute; inset: 0; order: 0; width: auto; height: auto; margin: 0; --mask: linear-gradient(to bottom, #000 0%, #000 36%, rgba(0,0,0,.5) 56%, transparent 80%); }
+  .hero__grid { padding-top: calc(var(--nav-h) + 6vh); }
+  .hero__title { font-size: clamp(1.8rem, 9.2vw, 3.2rem); margin-bottom: 6vh; }
+  .hero__word { white-space: nowrap; }
+  .hero .screen__label { top: calc(var(--nav-h) + 8px); font-size: .6rem; }
+  .blood-canvas { right: -1.2em; width: 5em; height: 3em; }
+}
+
+/* ---- fondo con capas: viñeta + lavado de sangre que crece con la etapa ---- */
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(60% 50% at 100% 100%, rgba(122, 22, 32, var(--wash, 0)), transparent 70%),
+    radial-gradient(120% 90% at 50% 40%, transparent 55%, rgba(20, 19, 17, .07));
+  mix-blend-mode: multiply;
+}
+html[data-stage="1"] { --wash: .05; }
+html[data-stage="2"] { --wash: .09; }
+html[data-stage="3"] { --wash: .14; }
+html[data-stage="4"] { --wash: .2; }
+
+/* huella de click: mancha chica donde tocás el papel */
+.astain--click { position: absolute; bottom: auto; z-index: 3; transition: opacity 400ms var(--ease-out), transform 500ms var(--ease-out); mix-blend-mode: multiply; }
+
+/* =====================================================================
+   QUIZ v2: intro, llamada de Dragan, consejo y compartir
+   ===================================================================== */
+.quiz__intro { max-width: 52ch; color: var(--gris-humo); }
+.quiz__slide .btn { justify-self: start; }
+.quiz__slide { transition: none; }
+.quiz.is-call { box-shadow: 8px 8px 0 var(--sangre-densa); }
+.quiz__phone { display: grid; grid-template-columns: 56px 1fr; grid-template-rows: auto auto; column-gap: var(--s-3); align-items: center; padding: var(--s-3) var(--s-4); border: 1px solid rgba(20, 19, 17, .18); background: rgba(243, 241, 234, .7); }
+.quiz__phone-icon { grid-row: 1 / 3; width: 44px; height: 44px; border-radius: 50%; background: var(--sangre); position: relative; animation: ring 1.1s ease-in-out infinite; }
+.quiz__phone-icon::before { content: ""; position: absolute; inset: 12px; background: var(--papel); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z'/%3E%3C/svg%3E") center / contain no-repeat; }
+.quiz__phone-icon::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 1px solid var(--sangre); opacity: 0; animation: ring-wave 1.1s ease-out infinite; }
+@keyframes ring { 0%, 100% { transform: rotate(0); } 10% { transform: rotate(-12deg); } 20% { transform: rotate(10deg); } 30% { transform: rotate(-8deg); } 40% { transform: rotate(6deg); } 50% { transform: rotate(0); } }
+@keyframes ring-wave { from { transform: scale(.9); opacity: .8; } to { transform: scale(1.6); opacity: 0; } }
+.quiz__phone-name { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-2); line-height: 1.1; }
+.quiz__phone-sub { font-size: var(--fs--1); color: var(--gris-humo); }
+.quiz__options--call { grid-template-columns: 1fr 1fr; gap: var(--s-3); }
+.quiz__options--call .quiz__opt { grid-template-columns: 1fr; text-align: center; padding: var(--s-4); font-family: var(--font-display); font-size: var(--fs-1); }
+.quiz__options--call .quiz__opt b { display: none; }
+.quiz__opt--answer { background: var(--sangre); color: var(--papel); border-color: var(--sangre); }
+.quiz__opt--answer:hover { background: var(--sangre-densa); }
+.quiz__extra { position: relative; z-index: 1; display: grid; gap: var(--s-3); justify-items: start; }
+.quiz__tip { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-1); color: var(--sangre); }
+@media (max-width: 640px) { .quiz__options--call { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .quiz__phone-icon, .quiz__phone-icon::after { animation: none; } }
+
+/* quiz: la columna izquierda no se parte por el ejercicio; mancha de borde más abajo */
+@media (min-width: 900px) { .section__head--quiz .exercise { grid-column: 1; } }
+.section--quiz .edge-stain--b { left: -120px; top: 420px; }
+
+/* =====================================================================
+   PASADA DE DISEÑO v5
+   ===================================================================== */
+/* hero: el halo ya no se recorta (las letras entran con fade + subida, sin máscara) y es más suave */
+.hero__word { overflow: visible; }
+.hero__word i { transform: translateY(.35em); opacity: 0; animation: letter-in 640ms var(--ease-out) forwards; }
+@keyframes letter-in { to { transform: none; opacity: 1; } }
+.hero__line--glow { color: #fff; text-shadow: 0 0 6px rgba(255, 255, 255, .55), 0 0 22px rgba(255, 255, 255, .32), 0 2px 18px rgba(20, 19, 17, .35); }
+.hero__line--para { text-shadow: 0 1px 10px rgba(20, 19, 17, .5); }
+.hero__line--red { text-shadow: 0 2px 0 rgba(90, 8, 12, .3), 0 10px 26px rgba(20, 19, 17, .3); }
+/* un velo oscuro suave detrás del bloque del título para que el blanco lea sobre cualquier plano del tráiler */
+.hero__title { position: relative; }
+.hero__title::before { content: ""; position: absolute; inset: -18% -12% -12% -10%; z-index: -1; background: radial-gradient(70% 70% at 40% 50%, rgba(20, 19, 17, .42), transparent 72%); pointer-events: none; }
+.hero .screen__plane::after { background: linear-gradient(to bottom, rgba(20, 19, 17, .35), rgba(20, 19, 17, .08) 40%, transparent 60%), linear-gradient(to right, rgba(20, 19, 17, .2), transparent 50%, rgba(20, 19, 17, .25)); }
+.hero__grid > .eyebrow { color: rgba(243, 241, 234, .82); }
+.hero .screen__label { color: rgba(243, 241, 234, .6); }
+
+/* personajes: las fotos descansan casi en blanco y negro y toman color al pasar o al estar activas */
+.card__media img { filter: saturate(.25) contrast(1.02); transition: filter 600ms var(--ease-out); }
+.card:hover .card__media img, .card.is-active .card__media img, .card:focus-within .card__media img { filter: saturate(1); }
+.card__name { letter-spacing: -.005em; }
+
+/* temporadas: la fila del desplegable responde al hover */
+.season-acc__sum { transition: background-color 250ms; padding-inline: var(--s-2); margin-inline: calc(var(--s-2) * -1); }
+.season-acc__sum:hover { background: var(--surface); }
+
+/* botones: mismo trazo en todo el sitio */
+.btn { border: 1px solid transparent; }
+.btn--primary { box-shadow: 0 10px 24px -14px rgba(122, 22, 32, .7); }
+.btn--primary:hover { transform: translateY(-1px); }
+
+/* índice: el título de cada lección también se tiñe al pasar */
+.syllabus__row:hover .syllabus__title { color: var(--sangre); }
+.syllabus__title { transition: color 250ms; }
+
+/* galería: leyenda con número grande, no sólo texto chico */
+.gallery__btn::before { font-size: .74rem; padding: var(--s-3); }
+
+/* pie: respiración lenta en la línea de cierre */
+.footer__close { animation: breathe-text 8s ease-in-out infinite; }
+@keyframes breathe-text { 0%, 100% { opacity: .78; } 50% { opacity: 1; } }
+
+@media (max-width: 900px) {
+  .hero__title::before { inset: -14% -8%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__word i { animation: none; transform: none; opacity: 1; }
+  .footer__close { animation: none; }
+  .card__media img { filter: none; }
+}
+
+/* =====================================================================
+   MÁS SANGRE (v6): gota en la barra de progreso, menú que gotea, palabras
+   que sangran, botones y episodios que chorrean
+   ===================================================================== */
+/* gota colgando del extremo de la línea de progreso; crece con el scroll */
+.progress-drop {
+  position: absolute; bottom: -2px; left: 0; width: 6px; height: 12px; margin-left: -3px;
+  background: var(--sangre); border-radius: 50% 50% 55% 55% / 30% 30% 70% 70%;
+  transform-origin: 50% 0; transform: translateY(0) scaleY(var(--grow, .5)); pointer-events: none;
+  transition: transform 400ms var(--ease-out);
+}
+/* menú: el subrayado gotea al pasar */
+.nav__links a::before {
+  content: ""; position: absolute; left: 50%; bottom: -2px; width: 3px; height: 0; margin-left: -1.5px;
+  background: var(--sangre); border-radius: 0 0 50% 50% / 0 0 70% 70%; transition: height 500ms var(--ease-out);
+}
+.nav__links a:hover::before { height: 10px; }
+/* palabras rojas: sangran al entrar en pantalla y al pasar el mouse */
+.stain-word::after { height: 0; transition: height 700ms var(--ease-out); }
+.is-visible .stain-word::after, .reveal.is-visible .stain-word::after, .hero .stain-word::after, .nav .stain-word::after, .footer .stain-word::after { height: .24em; }
+.stain-word:hover::after { height: .5em; }
+/* botones rojos: gotean al pasar */
+.btn--primary { position: relative; overflow: visible; }
+.btn--primary::after {
+  content: ""; position: absolute; left: 22%; bottom: -1px; width: 5px; height: 0;
+  background: var(--sangre); border-radius: 0 0 50% 50% / 0 0 70% 70%; transition: height 600ms var(--ease-out);
+}
+.btn--primary:hover::after { height: 14px; }
+/* episodios marcados: la gota se estira al pasar */
+.eps li[data-stained] .ep__title::after { transition: height 500ms var(--ease-out), transform 500ms var(--ease-out); }
+.eps li[data-stained]:hover .ep__title::after { height: 18px; transform: translateY(4px); }
+/* la mancha de click sube por encima del contenido */
+.astain--click { z-index: 4; }
+@media (prefers-reduced-motion: reduce) {
+  .stain-word::after { height: .24em; transition: none; }
+  .progress-drop, .nav__links a::before, .btn--primary::after { display: none; }
+}
+
+/* botones que son links: sin subrayado */
+.btn, .btn:hover, .btn:focus-visible { text-decoration: none; }
+.syllabus__go, .nextlesson__go, .trailer__note a { text-decoration: none; }
+.trailer__note a { border-bottom: 1px solid currentColor; }
+
+/* =====================================================================
+   SANGRE v7: cortina entre páginas, charco al pie, rastro global,
+   temporadas que chorrean, flechas que salpican, galería que sangra
+   ===================================================================== */
+/* cortina de goteo al salir de una página */
+.wipe { position: fixed; inset: 0; z-index: 80; pointer-events: none; display: flex; align-items: flex-start; overflow: hidden; }
+.wipe i { flex: 1; height: 0; background: var(--sangre); border-radius: 0 0 40% 40% / 0 0 18px 18px; transform-origin: 50% 0; animation: wipe-down 520ms cubic-bezier(.6, 0, .9, .4) forwards; }
+.wipe i:nth-child(odd) { background: var(--sangre-densa); }
+@keyframes wipe-down { to { height: 130vh; } }
+/* charco en el borde inferior: crece con cada gota que cae */
+.pool-line { position: fixed; left: 50%; bottom: 0; height: 4px; width: 0; z-index: 28; pointer-events: none; transform: translateX(-50%); background: var(--sangre); border-radius: 4px 4px 0 0; transition: width 900ms var(--ease-out); opacity: .9; }
+.pool-line::before { content: ""; position: absolute; left: 0; right: 0; top: -3px; height: 3px; background: inherit; border-radius: 50% 50% 0 0 / 100% 100% 0 0; opacity: .6; }
+/* rastro global de gotitas (más fino que el del hero) */
+.trail-dot { position: fixed; width: 4px; height: 6px; margin: -3px 0 0 -2px; z-index: 27; pointer-events: none; background: var(--sangre); opacity: .45; border-radius: 50% 50% 55% 55% / 40% 40% 60% 60%; animation: trail-fade 700ms var(--ease-out) forwards; }
+/* temporadas: al abrir, del número chorrea una línea */
+.season-acc__num { position: relative; }
+.season-acc__num::after { content: ""; position: absolute; left: 48%; top: 96%; width: 3px; height: 0; background: var(--sangre); border-radius: 0 0 50% 50% / 0 0 70% 70%; transition: height 900ms var(--ease-out); }
+.season-acc.is-open .season-acc__num::after { height: 46px; }
+/* carrusel: flechas que se manchan al usarlas */
+.carousel__btn:active { background: var(--sangre); color: var(--papel); }
+/* galería: la foto sangra desde abajo al pasar */
+.gallery__btn img { transition: transform 600ms var(--ease-out), filter 400ms; }
+.gallery__btn::after { background: linear-gradient(to top, rgba(122, 22, 32, 0), rgba(122, 22, 32, 0) 100%); transition: background 500ms var(--ease-out), border-color 250ms; }
+.gallery__btn:hover::after { background: linear-gradient(to top, rgba(122, 22, 32, .55), rgba(122, 22, 32, 0) 45%); }
+/* mantras: la línea roja gotea al final */
+.mantra { position: relative; }
+.mantra::after { content: ""; position: absolute; left: -1px; bottom: -22px; width: 3px; height: 0; background: var(--sangre); border-radius: 0 0 50% 50% / 0 0 70% 70%; transition: height 900ms var(--ease-out) 300ms; }
+.mantra.is-visible::after { height: 22px; }
+/* loader: la línea suelta una gota antes de abrir */
+.loader__mark { position: relative; overflow: visible; }
+.loader__drop { position: absolute; left: 50%; top: 88%; width: 5px; height: 0; margin-left: -2.5px; background: var(--sangre); border-radius: 0 0 50% 50% / 0 0 70% 70%; animation: loader-drop 500ms var(--ease-in) 1050ms forwards; }
+@keyframes loader-drop { to { height: 40px; } }
+@media (prefers-reduced-motion: reduce) { .wipe, .trail-dot, .loader__drop, .pool-line { display: none; } }
+
+.loader__mark svg text, .loader__mark svg line { /* heredan de .loader__text/.loader__line */ }
+
+/* =====================================================================
+   v8: transición como chorros de sangre (no telón) + loader que respira
+   ===================================================================== */
+.wipe { display: block; filter: url(#f-blood-soft); }
+.wipe::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 0; background: var(--sangre); animation: wipe-top 700ms var(--ease-out) forwards; }
+@keyframes wipe-top { to { height: 14px; } }
+.wipe i {
+  position: absolute; top: 0; height: 0; flex: none;
+  background: linear-gradient(to right, rgba(122, 22, 32, .75), var(--sangre) 40%, var(--sangre-densa) 70%, rgba(90, 14, 22, .7));
+  border-radius: 0 0 55% 55% / 0 0 34px 34px;
+  animation-name: drip-down; animation-timing-function: cubic-bezier(.55, 0, .85, .5); animation-fill-mode: forwards;
+}
+.wipe i:nth-child(odd) { background: linear-gradient(to right, rgba(122, 22, 32, .7), var(--sangre-densa) 50%, rgba(122, 22, 32, .7)); }
+@keyframes drip-down { to { height: 125vh; } }
+body.is-leaving main, body.is-leaving .nextlesson, body.is-leaving .final { opacity: 0; transform: none; transition: opacity 650ms ease-in; }
+
+/* loader: respirar y soltar */
+.loader { display: grid; place-items: center; }
+.loader__mark, .loader__hint, .loader__drop { display: none; }
+.breathe { position: relative; width: 220px; height: 220px; display: grid; place-items: center; }
+.breathe__ring {
+  position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid var(--salvia);
+  transform: scale(.55); animation: breathe-ring 2750ms cubic-bezier(.45, 0, .55, 1) forwards;
+}
+@keyframes breathe-ring {
+  0% { transform: scale(.55); border-color: var(--salvia); background: transparent; }
+  42% { transform: scale(1); border-color: var(--salvia); background: transparent; }
+  78% { transform: scale(.6); border-color: var(--sangre); background: transparent; }
+  86% { transform: scale(.14); border-color: var(--sangre); background: var(--sangre); }
+  100% { transform: scale(.14) translateY(600px); background: var(--sangre); border-color: var(--sangre); opacity: 1; }
+}
+.breathe__word {
+  position: absolute; font-family: var(--font-display); font-weight: 300; font-size: var(--fs-2); letter-spacing: .2em; text-transform: uppercase; color: var(--tinta); opacity: 0;
+}
+.breathe__word--in { animation: word-in 2750ms linear forwards; }
+.breathe__word--out { animation: word-out 2750ms linear forwards; }
+@keyframes word-in { 0% { opacity: 0; } 8% { opacity: 1; } 38% { opacity: 1; } 46% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes word-out { 0%, 46% { opacity: 0; } 54% { opacity: 1; } 76% { opacity: 1; } 84% { opacity: 0; } 100% { opacity: 0; } }
+.breathe__drop { display: none; }
+.is-loaded .loader { transition: opacity 400ms var(--ease-out), visibility 400ms; }
+@media (prefers-reduced-motion: reduce) { .breathe__ring, .breathe__word { animation: none; } .breathe__word--in { opacity: 1; } }
+
+/* v9: la transición es un canvas con chorreaduras dibujadas (sin blur, sin brillo) */
+canvas.wipe { position: fixed; inset: 0; z-index: 80; pointer-events: none; display: block; filter: url(#f-sat); }
+canvas.wipe::before { display: none; }
+
+/* v10: la transición es el salpicón de la simulación, con el filtro de sangre mate, en multiply sobre el papel */
+canvas.wipe { filter: url(#f-blood-soft); mix-blend-mode: multiply; }
+body.is-leaving main, body.is-leaving .nextlesson, body.is-leaving .final { transition: opacity 700ms ease-in 120ms; }
+
+/* el canvas de la transición ocupa toda la pantalla (un canvas no se estira con inset) */
+canvas.wipe { width: 100vw; height: 100vh; }
+
+/* la respiración de bienvenida sólo la primera vez por visita */
+.no-intro .loader { display: none; }
+
+/* transición sutil */
+canvas.wipe { opacity: .82; }
+
+/* salpicón de click simulado */
+.astain--sim { position: absolute; bottom: auto; z-index: 4; pointer-events: none; filter: url(#f-blood-soft); mix-blend-mode: multiply; opacity: 0; transition: opacity 250ms var(--ease-out); transform: none; }
+.astain--sim.is-on { opacity: .95; }
+
+/* salpicón de click: más discreto */
+.astain--sim.is-on { opacity: .8; }
+.astain--sim { transition: opacity 900ms var(--ease-out); }
+
+/* =====================================================================
+   PASADA DE DISEÑO v15: episodios con fotograma, índice con "estás acá",
+   tráiler más grande
+   ===================================================================== */
+.eps--stills { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-4) var(--s-3); border-top: 0; padding-top: 0; }
+.eps--stills li { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: var(--s-2); row-gap: var(--s-2); align-items: baseline; padding: 0; }
+.ep__still { grid-column: 1 / 3; aspect-ratio: 16 / 9; overflow: hidden; background: var(--salvia-oscura); position: relative; }
+.ep__still img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.7); transition: filter 500ms var(--ease-out), transform 700ms var(--ease-out); }
+.eps--stills li:hover .ep__still img { filter: saturate(1); transform: scale(1.04); }
+.ep__still.is-placeholder img { visibility: hidden; }
+.eps--stills li[data-stained] .ep__still::after {
+  content: ""; position: absolute; left: 10%; right: 10%; bottom: 0; height: 3px; background: var(--sangre);
+}
+.eps--stills li[data-stained] .ep__still::before {
+  content: ""; position: absolute; left: 22%; top: 0; width: 4px; height: 0; background: var(--sangre);
+  border-radius: 0 0 50% 50% / 0 0 70% 70%; transition: height 700ms var(--ease-out); z-index: 1;
+}
+.eps--stills li[data-stained]:hover .ep__still::before { height: 38%; }
+.eps--stills .ep__title::after { display: none; }
+.season-acc__body { max-width: none; }
+.season-acc__body > p { max-width: 60ch; }
+@media (min-width: 820px) { .season-acc__inner { grid-template-columns: 220px minmax(0, 1fr); } }
+@media (max-width: 900px) { .eps--stills { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* índice: la lección en curso */
+.syllabus__row--here { cursor: default; }
+.syllabus__row--here .syllabus__num { color: var(--sangre); }
+.syllabus__go--here { color: var(--muted); padding-right: 0; }
+.syllabus__go--here::after { content: ""; }
+
+/* tráiler: a todo el ancho, botón más presente */
+.trailer__frame { width: 100%; }
+.trailer__play { width: 104px; height: 104px; }
+.trailer__play svg { width: 40px; height: 40px; }
+.trailer__cta { font-size: var(--fs-0); letter-spacing: .32em; }
+
+/* siguiente lección: menos aire muerto al final */
+.nextlesson { padding-bottom: 64px; }
+
+.eps--stills li[data-stained] .ep__title::after { display: none; }
+
+/* =====================================================================
+   v16 · ENTREGA: el fondo respira, la gota cae donde nace el charco,
+   contacto, temporada 3, SEO. Idea de fondo: la página es una app de
+   meditación (anillos que se expanden y contraen cada 9 s) a la que la
+   sangre le va ganando terreno lección a lección: los anillos pasan de
+   salvia a rojo y el lavado del ángulo crece. Nunca oscurece.
+   ===================================================================== */
+/* etapas: siempre papel, cada vez más sucio */
+html[data-stage="3"] { --bg: #DCD3C2; --muted: #5E5850; --line: rgba(20, 19, 17, .2); --grain: .55; }
+html[data-stage="4"] { --bg: #D3C8B3; --muted: #5A5249; --line: rgba(20, 19, 17, .22); --grain: .6; }
+
+/* anillos de respiración */
+.breath-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; --ring: var(--salvia); --bx: 74%; --by: 60%; }
+html[data-stage="1"] .breath-bg { --ring: color-mix(in srgb, var(--salvia) 78%, var(--sangre)); }
+html[data-stage="2"] .breath-bg { --ring: color-mix(in srgb, var(--salvia) 56%, var(--sangre)); }
+html[data-stage="3"] .breath-bg { --ring: color-mix(in srgb, var(--salvia) 32%, var(--sangre)); }
+html[data-stage="4"] .breath-bg { --ring: color-mix(in srgb, var(--salvia) 10%, var(--sangre)); }
+.breath-bg::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(circle at var(--bx) var(--by), color-mix(in srgb, var(--ring) 16%, transparent), transparent 38%);
+  animation: breath-glow 9s cubic-bezier(.45, 0, .55, 1) infinite; transition: background 1.2s;
+}
+.breath-bg i {
+  position: absolute; left: var(--bx); top: var(--by); width: var(--bw); aspect-ratio: 1; border-radius: 50%;
+  border: 1px solid var(--ring); opacity: var(--bo); translate: -50% -50%;
+  animation: breath-ring-bg 9s cubic-bezier(.45, 0, .55, 1) infinite; animation-delay: var(--bd, 0s);
+  transition: border-color 1.2s var(--ease-out);
+}
+.breath-bg i:nth-child(1) { --bw: 26vmax; --bo: .38; }
+.breath-bg i:nth-child(2) { --bw: 42vmax; --bo: .3; --bd: -.9s; }
+.breath-bg i:nth-child(3) { --bw: 60vmax; --bo: .22; --bd: -1.8s; }
+.breath-bg i:nth-child(4) { --bw: 82vmax; --bo: .15; --bd: -2.7s; }
+.breath-bg i:nth-child(5) { --bw: 108vmax; --bo: .09; --bd: -3.6s; }
+@keyframes breath-ring-bg { 0%, 100% { scale: .9; } 50% { scale: 1.07; } }
+@keyframes breath-glow { 0%, 100% { opacity: .6; } 50% { opacity: 1; } }
+/* la palabra que acompaña la respiración, abajo a la izquierda */
+.breath-bg__word {
+  position: absolute; left: var(--gutter); bottom: 18px;
+  font-family: var(--font-display); font-size: .62rem; letter-spacing: .34em; text-transform: uppercase; color: var(--muted); opacity: 0;
+}
+.breath-bg__word--in { animation: bg-word-in 9s linear infinite; }
+.breath-bg__word--out { animation: bg-word-out 9s linear infinite; }
+@keyframes bg-word-in { 0% { opacity: 0; } 8%, 40% { opacity: .9; } 50%, 100% { opacity: 0; } }
+@keyframes bg-word-out { 0%, 50% { opacity: 0; } 58%, 90% { opacity: .9; } 100% { opacity: 0; } }
+@media (max-width: 900px) { .breath-bg { --bx: 80%; --by: 70%; } .breath-bg i { opacity: calc(var(--bo) * .8); } .breath-bg__word { display: none; } }
+@media (prefers-reduced-motion: reduce) { .breath-bg i, .breath-bg::before, .breath-bg__word { animation: none; } .breath-bg__word--in { opacity: .9; } }
+
+/* el pie ya no lleva la barra recta; las manchas de las gotas alcanzan */
+.pool-line { display: none; }
+
+/* hero: el tráiler se recorta un poco más para tapar las franjas negras del video */
+.hero .screen__video iframe { transform: translate(-50%, -50%) scale(1.16); }
+.hero .screen__plane::after { background: linear-gradient(to bottom, rgba(20, 19, 17, .42), rgba(20, 19, 17, .08) 42%, transparent 60%), linear-gradient(to right, rgba(20, 19, 17, .22), transparent 50%, rgba(20, 19, 17, .25)); }
+/* gota: el alto lo fija blood.js para que la punta caiga en el punto de impacto */
+.blood-drip__path { stroke-width: 3.2; }
+.blood-canvas { top: -.9em; height: 3.8em; }
+@media (max-width: 900px) { .blood-canvas { height: 3.6em; } }
+/* ficha del hero: el dato de temporadas ya no lleva paréntesis */
+.hero__meta dd small { display: block; font-size: var(--fs--1); color: var(--muted); }
+
+/* =====================================================================
+   CONTACTO · "Consultorio de Breitner"
+   ===================================================================== */
+.section--contacto { padding-block: 96px 112px; scroll-margin-top: var(--nav-h); }
+.contact { display: grid; gap: var(--s-6); }
+@media (min-width: 900px) { .contact { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: var(--s-7); align-items: start; } }
+.contact__aside { display: grid; gap: var(--s-4); }
+.contact__aside .section__title { max-width: 16ch; }
+.contact__ways { display: grid; gap: var(--s-3); padding-top: var(--s-4); border-top: 1px solid var(--line); }
+.contact__ways div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: var(--s-3); align-items: baseline; }
+.contact__ways dt { font-family: var(--font-display); font-size: .68rem; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); }
+.contact__ways dd { margin: 0; font-size: var(--fs--1); }
+.contact__ways a { color: var(--sangre); text-decoration: none; border-bottom: 1px solid currentColor; }
+.form {
+  position: relative; display: grid; gap: var(--s-4); padding: var(--s-5);
+  background: rgba(243, 241, 234, .55); border: 1px solid rgba(20, 19, 17, .18); box-shadow: 8px 8px 0 var(--sangre);
+}
+.form__row { display: grid; gap: var(--s-4); }
+@media (min-width: 640px) { .form__row { grid-template-columns: 1fr 1fr; } }
+.field { display: grid; gap: var(--s-1); }
+.field label { font-family: var(--font-display); font-size: .68rem; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); }
+.field input, .field select, .field textarea {
+  font: inherit; color: var(--tinta); background: transparent; border: 0; border-radius: 0;
+  border-bottom: 1px solid rgba(20, 19, 17, .32); padding: var(--s-2) 0; transition: border-color 200ms;
+}
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-bottom-color: var(--sangre); }
+.field textarea { min-height: 110px; resize: vertical; }
+.field select {
+  appearance: none; -webkit-appearance: none; padding-right: 28px; cursor: pointer;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%237A1620' stroke-width='1.4'/%3E%3C/svg%3E") right center / 12px no-repeat;
+}
+.field input::placeholder, .field textarea::placeholder { color: rgba(20, 19, 17, .38); }
+.form__check { display: flex; gap: var(--s-3); align-items: flex-start; font-size: var(--fs--1); color: var(--muted); cursor: pointer; }
+.form__check input { accent-color: var(--sangre); width: 18px; height: 18px; margin: 3px 0 0; flex: none; }
+.form__foot { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3) var(--s-4); }
+.form__hint { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-0); color: var(--sangre); max-width: 34ch; line-height: 1.35; }
+.form__done {
+  position: absolute; inset: 0; z-index: 2; display: grid; place-content: center; justify-items: center; gap: var(--s-4);
+  padding: var(--s-5); text-align: center; background: rgba(243, 241, 234, .97);
+  opacity: 0; visibility: hidden; transition: opacity 400ms var(--ease-out), visibility 400ms;
+}
+.form.is-sent .form__done { opacity: 1; visibility: visible; }
+.form__done p { max-width: 38ch; color: var(--gris-humo); }
+.stamp {
+  position: relative; width: max-content; max-width: 100%; padding: var(--s-3) var(--s-4);
+  border: 3px solid var(--sangre); color: var(--sangre); transform: rotate(-4deg); opacity: 0;
+  font-family: var(--font-display); font-weight: 300; font-size: var(--fs-3); line-height: 1.05; text-transform: uppercase; letter-spacing: .04em;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 5 -1.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 5 -1.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.stamp small { display: block; font-size: .68rem; letter-spacing: .3em; margin-bottom: 4px; }
+.form.is-sent .stamp { animation: stamp 220ms var(--ease-stamp) 250ms forwards, shake 240ms linear 470ms; }
+.form__done .btn { color: var(--tinta); border-color: rgba(20, 19, 17, .25); }
+@media (max-width: 900px) { .section--contacto { padding-block: 72px 88px; } .form { padding: var(--s-4); box-shadow: 6px 6px 0 var(--sangre); } .contact__ways div { grid-template-columns: 90px minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .form.is-sent .stamp { animation: none; opacity: 1; } }
+
+/* =====================================================================
+   TEMPORADA 3 · en rodaje (sin póster: concha del Camino dibujada)
+   ===================================================================== */
+.season-acc--soon .season-acc__num { color: var(--salvia-oscura); }
+.season-acc--soon.is-open .season-acc__num { color: var(--sangre); }
+.season-acc__meta em { font-style: normal; color: var(--sangre); }
+.season__poster--svg { background: var(--salvia-oscura); }
+.season__poster--svg svg { width: 100%; height: 100%; display: block; }
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-4) var(--s-5); border-top: 1px solid var(--line); padding-top: var(--s-4); }
+.facts div { display: grid; gap: var(--s-1); }
+.facts dt { font-family: var(--font-display); font-size: .68rem; letter-spacing: .24em; text-transform: uppercase; color: var(--sangre); }
+.facts dd { margin: 0; font-family: var(--font-display); font-weight: 300; font-size: var(--fs-1); line-height: 1.3; }
+.facts dd small { display: block; font-family: var(--font-body); font-size: var(--fs--1); color: var(--muted); margin-top: 2px; }
+.facts em { font-style: italic; }
+@media (max-width: 640px) { .facts { grid-template-columns: 1fr; } }
+
+/* =====================================================================
+   PULIDO DE TEXTO Y LAYOUT
+   ===================================================================== */
+/* navbar: siete links entran sin apretarse */
+.nav__links { gap: clamp(var(--s-3), 2vw, var(--s-4)); }
+/* los títulos internos ahora son h1 (SEO): mismo tamaño que antes */
+h1.section__title { font-size: clamp(var(--fs-4), 5.2vw, var(--fs-5)); }
+/* pie: enlaces */
+.footer__links { display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-4); margin-bottom: var(--s-4); font-family: var(--font-display); font-size: var(--fs--1); letter-spacing: .2em; text-transform: uppercase; }
+.footer__links a { text-decoration: none; color: var(--muted); transition: color 200ms; }
+.footer__links a:hover { color: var(--sangre); }
+/* galería: leyenda real, no sólo el número */
+.gallery__btn::before { content: attr(data-cap); letter-spacing: .12em; font-size: .7rem; line-height: 1.35; text-transform: none; padding: var(--s-4) var(--s-3) var(--s-3); }
+.lightbox__caption { text-transform: none; letter-spacing: .04em; max-width: 60ch; text-align: center; }
+/* índice: séptima fila (contacto) diferenciada */
+.syllabus__row--extra .syllabus__num { color: var(--salvia); }
+
+/* QA v16.1: hasta tablet, la fila del desplegable pone la meta debajo (no choca con el ícono ni parte el título) */
+@media (max-width: 900px) {
+  .season-acc__sum { grid-template-columns: 56px minmax(0, 1fr) 32px; grid-template-rows: auto auto; align-items: start; row-gap: var(--s-2); }
+  .season-acc__num { grid-row: 1 / 3; }
+  .season-acc__title { align-self: center; }
+  .season-acc__icon { grid-column: 3; grid-row: 1; align-self: center; }
+  .season-acc__meta { grid-column: 2 / 4; flex-wrap: wrap; gap: var(--s-1) var(--s-3); font-size: .7rem; letter-spacing: .12em; }
+}
+
+/* QA v16.1: hero en móvil. El video se recorta más (sin franja negra arriba)
+   y la bajada se apoya en un velo de papel para que se lea sobre cualquier plano. */
+@media (max-width: 900px) {
+  .hero .screen__video iframe { transform: translate(-50%, -50%) scale(1.55); }
+  .hero .screen { --mask: linear-gradient(to bottom, #000 0%, #000 28%, rgba(0,0,0,.45) 44%, transparent 62%); }
+  .hero__panel::before { inset: -28px -32px -24px -32px; background: radial-gradient(95% 75% at 50% 42%, rgba(243, 241, 234, .96), rgba(243, 241, 234, .75) 55%, transparent 88%); }
+}
+
+/* QA v16.2: contraste (Lighthouse). Eyebrow y etiquetas chicas más oscuras sobre el papel sucio. */
+.eyebrow, html[data-stage="3"] .eyebrow, html[data-stage="4"] .eyebrow { color: var(--salvia-oscura); }
+html[data-stage="1"] { --muted: #66605A; }
+html[data-stage="2"] { --muted: #5E5850; }
+html[data-stage="3"] { --muted: #57514A; }
+html[data-stage="4"] { --muted: #524C45; }
+.contact__ways dt, .facts dt, .hero__meta dt, .card__lesson span, .field label, .quiz__step { color: var(--muted); }
+.facts dt { color: var(--sangre); }
+/* v16.2b: contraste 4.5:1 sobre el papel más sucio y entrada de página sin desplazamiento (CLS) */
+html[data-stage="2"] .eyebrow, html[data-stage="3"] .eyebrow, html[data-stage="4"] .eyebrow { color: #46503D; }
+html[data-stage="2"] { --muted: #4E4842; }
+html[data-stage="3"] { --muted: #4A443E; }
+html[data-stage="4"] { --muted: #45403A; }
+@keyframes page-in { from { opacity: 0; } to { opacity: 1; } }
+/* v16.2c: la marca del pie usa rojo denso sobre el papel sucio (contraste) */
+html[data-stage="2"] .footer__brand .stain-word, html[data-stage="3"] .footer__brand .stain-word, html[data-stage="4"] .footer__brand .stain-word { color: var(--sangre-densa); }
+
+/* v16.2d: el ejercicio reserva su alto antes de escribirse (sin salto de layout) */
+.exercise__text { position: relative; }
+.exercise__ghost { visibility: hidden; }
+.exercise__typed { position: absolute; inset: 0; }
+.exercise__text::after { content: none; }
+.exercise__typed::after { content: "8D"; color: var(--sangre); animation: caret 900ms steps(2) infinite; }
+.exercise.is-done .exercise__typed::after { content: ""; }
+@media (prefers-reduced-motion: reduce) { .exercise__typed::after { animation: none; } }
+/* v16.3: entre 901 y 1140 px la navbar no entra con las dos marcas: se oculta la de la derecha */
+@media (min-width: 901px) and (max-width: 1140px) {
+  .nav { grid-template-columns: auto 1fr; }
+  .nav__brand--stained { display: none; }
+  .nav__links { justify-self: end; }
+}
+/* pie sin la línea de proyecto de clase: la marca queda a la derecha */
+.footer__row { justify-content: flex-end; }
+
+/* v17: carrusel infinito en movimiento continuo: sin snap ni scroll suave (el rAF manda) */
+.carousel__track.is-infinite { scroll-snap-type: none; scroll-behavior: auto; }
+.carousel__track.is-infinite .card { scroll-snap-align: none; }
+
+/* v17: el video del hero sólo se ve cuando reproduce; mientras carga, termina o rebobina queda el still */
+.screen__video { transition: opacity 600ms var(--ease-out); }
+.screen.is-loading .screen__video { opacity: 0; }
+/* v17: el menú móvil entra completo (7 links) y, si la pantalla es baja, se puede deslizar */
+@media (max-width: 900px) {
+  .nav__links { overflow-y: auto; -webkit-overflow-scrolling: touch; gap: var(--s-3); padding: var(--s-5) var(--gutter) var(--s-6); overscroll-behavior: contain; }
+  .nav__links a { font-size: clamp(1.4rem, 5.6vw, 1.95rem); padding: var(--s-2) 0; }
+}
+@media (max-width: 900px) and (max-height: 620px) {
+  .nav__links { gap: var(--s-2); padding-top: var(--s-4); }
+  .nav__links a { font-size: 1.3rem; }
+}

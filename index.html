@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="es" data-stage="0">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mindfulness para asesinos · Landing no oficial (Netflix)</title>
+  <meta name="description" content="Björn Diemel hizo un curso de mindfulness para salvar su matrimonio. Ahora tiene un problema menos. Personajes, tráiler, temporadas, quiz y contacto.">
+  <meta name="author" content="Proyecto de clase · Mindfulness para asesinos">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#F3F1EA">
+  <meta name="color-scheme" content="light">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mindfulness para asesinos">
+  <meta property="og:locale" content="es_AR">
+  <meta property="og:title" content="Mindfulness para asesinos · Landing no oficial (Netflix)">
+  <meta property="og:description" content="Björn Diemel hizo un curso de mindfulness para salvar su matrimonio. Ahora tiene un problema menos. Personajes, tráiler, temporadas, quiz y contacto.">
+  <meta property="og:image" content="assets/img/galeria/galeria-01.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mindfulness para asesinos · Landing no oficial (Netflix)">
+  <meta name="twitter:description" content="Björn Diemel hizo un curso de mindfulness para salvar su matrimonio. Ahora tiene un problema menos. Personajes, tráiler, temporadas, quiz y contacto.">
+  <meta name="twitter:image" content="assets/img/galeria/galeria-01.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400&family=Montserrat:wght@800;900&family=Work+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23F3F1EA'/%3E%3Cpath d='M16 4c3 7 8 11 8 17a8 8 0 0 1-16 0c0-6 5-10 8-17z' fill='%237A1620'/%3E%3C/svg%3E">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "TVSeries", "name": "Mindfulness para asesinos", "alternateName": ["Achtsam Morden", "Murder Mindfully"], "genre": ["Comedia negra", "Crimen"], "inLanguage": "de", "countryOfOrigin": {"@type": "Country", "name": "Alemania"}, "numberOfSeasons": 2, "numberOfEpisodes": 16, "startDate": "2024-10-31", "isBasedOn": {"@type": "Book", "name": "Achtsam morden", "author": {"@type": "Person", "name": "Karsten Dusse"}}, "actor": [{"@type": "Person", "name": "Tom Schilling"}, {"@type": "Person", "name": "Emily Cox"}, {"@type": "Person", "name": "Sascha Alexander Geršak"}, {"@type": "Person", "name": "Peter Jordan"}, {"@type": "Person", "name": "Murathan Muslu"}, {"@type": "Person", "name": "Marc Hosemann"}, {"@type": "Person", "name": "Britta Hammelstein"}, {"@type": "Person", "name": "Luca Maric"}], "productionCompany": {"@type": "Organization", "name": "Netflix"}, "url": "https://www.netflix.com/title/81554969", "sameAs": ["https://en.wikipedia.org/wiki/Murder_Mindfully", "https://de.wikipedia.org/wiki/Achtsam_morden"]}</script>
+  <script>try{if(sessionStorage.getItem("mpa-intro"))document.documentElement.classList.add("no-intro")}catch(e){}</script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="index">
+
+<!-- ===== Fondo: la página respira (anillos), y la sangre le gana terreno lección a lección ===== -->
+<div class="breath-bg" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span class="breath-bg__word breath-bg__word--in">Inhalá</span><span class="breath-bg__word breath-bg__word--out">Exhalá</span></div>
+
+<!-- ===== SVG global: filtros reutilizables ===== -->
+<svg class="svg-defs" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="f-wobble" x="-30%" y="-30%" width="160%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018 0.026" numOctaves="4" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="46" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="f-wobble-2" x="-30%" y="-30%" width="160%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="21" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="30" xChannelSelector="R" yChannelSelector="B"/>
+      <feGaussianBlur stdDeviation="1.4"/>
+    </filter>
+    <filter id="f-wobble-small" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="3" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="f-soft"><feGaussianBlur stdDeviation="7"/></filter>
+    <!-- sangre realista: gradiente (centro espeso), borde oscuro (seco), brillo húmedo y grano -->
+    <radialGradient id="g-pool" cx="48%" cy="52%" r="60%">
+      <stop offset="0" stop-color="#4E0A12"/>
+      <stop offset=".55" stop-color="#6E121B"/>
+      <stop offset="1" stop-color="#8A1B26"/>
+    </radialGradient>
+    <filter id="f-blood" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018 0.026" numOctaves="4" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="46" xChannelSelector="R" yChannelSelector="G" result="shape"/>
+      <feMorphology in="shape" operator="erode" radius="2.5" result="inner"/>
+      <feComposite in="shape" in2="inner" operator="out" result="rim"/>
+      <feFlood flood-color="#3A060C" flood-opacity=".75" result="rimColor"/>
+      <feComposite in="rimColor" in2="rim" operator="in" result="rimDark"/>
+      <feGaussianBlur in="shape" stdDeviation="7" result="blurA"/>
+      <feSpecularLighting in="blurA" surfaceScale="8" specularConstant=".42" specularExponent="22" lighting-color="#ffe6e6" result="spec">
+        <fePointLight x="150" y="40" z="260"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="shape" operator="in" result="specIn"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3" result="grain"/>
+      <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .05 0" result="grainA"/>
+      <feComposite in="grainA" in2="shape" operator="in" result="grainIn"/>
+      <feMerge><feMergeNode in="shape"/><feMergeNode in="grainIn"/><feMergeNode in="rimDark"/><feMergeNode in="specIn"/></feMerge>
+    </filter>
+    <filter id="f-goo-blood" x="-15%" y="-15%" width="130%" height="140%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2.4" result="b"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" seed="9" result="n"/>
+      <feDisplacementMap in="b" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" result="bd"/>
+      <feColorMatrix in="bd" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 16 -6" result="goo"/>
+      <feGaussianBlur in="goo" stdDeviation=".7" result="shape"/>
+      <feMorphology in="shape" operator="erode" radius="1.6" result="inner"/>
+      <feComposite in="shape" in2="inner" operator="out" result="rim"/>
+      <feFlood flood-color="#33050A" flood-opacity=".7" result="rimColor"/>
+      <feComposite in="rimColor" in2="rim" operator="in" result="rimDark"/>
+      <feGaussianBlur in="shape" stdDeviation="5" result="blurA"/>
+      <feSpecularLighting in="blurA" surfaceScale="7" specularConstant=".42" specularExponent="24" lighting-color="#ffe9e9" result="spec">
+        <fePointLight x="120" y="30" z="240"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="shape" operator="in" result="specIn"/>
+      <feMerge><feMergeNode in="shape"/><feMergeNode in="rimDark"/><feMergeNode in="specIn"/></feMerge>
+    </filter>
+    <filter id="f-goo-blood-m" x="-15%" y="-15%" width="130%" height="140%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.6" result="b"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="3" seed="9" result="n"/>
+      <feDisplacementMap in="b" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G" result="bd"/>
+      <feColorMatrix in="bd" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 16 -6" result="goo"/>
+      <feGaussianBlur in="goo" stdDeviation=".5" result="shape"/>
+      <feMorphology in="shape" operator="erode" radius="1" result="inner"/>
+      <feComposite in="shape" in2="inner" operator="out" result="rim"/>
+      <feFlood flood-color="#33050A" flood-opacity=".7" result="rimColor"/>
+      <feComposite in="rimColor" in2="rim" operator="in" result="rimDark"/>
+      <feGaussianBlur in="shape" stdDeviation="3" result="blurA"/>
+      <feSpecularLighting in="blurA" surfaceScale="4" specularConstant=".28" specularExponent="26" lighting-color="#ffe9e9" result="spec">
+        <fePointLight x="70" y="10" z="150"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="shape" operator="in" result="specIn"/>
+      <feMerge><feMergeNode in="shape"/><feMergeNode in="rimDark"/><feMergeNode in="specIn"/></feMerge>
+    </filter>
+    <filter id="f-blood-soft" x="-15%" y="-15%" width="130%" height="140%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" seed="9" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G" result="shape"/>
+      <feGaussianBlur in="shape" stdDeviation="3.5" result="blurA"/>
+      <feSpecularLighting in="blurA" surfaceScale="4" specularConstant=".07" specularExponent="34" lighting-color="#ffe4e4" result="spec">
+        <fePointLight x="120" y="30" z="240"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="shape" operator="in" result="specIn"/>
+      <feMerge><feMergeNode in="shape"/><feMergeNode in="specIn"/></feMerge>
+    </filter>
+    <filter id="f-sat" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" seed="21" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="14" xChannelSelector="R" yChannelSelector="B"/>
+    </filter>
+    <!-- mancha reutilizable para los bordes de las secciones infectadas -->
+    <symbol id="s-stain" viewBox="0 0 600 420">
+      <g filter="url(#f-blood)">
+        <path fill="url(#g-pool)" d="M300 205 c-40-120 60-140 130-100 c 60 30 90 70 70 130 c-15 50-90 80-150 65 c-70-15-130-40-135-95 c-3-40 40-60 85 0z"/>
+        <path fill="#6E121B" d="M150 215 c-40-10-70 20-55 40 c 20 25 60 10 55-40z"/>
+        <path fill="#6E121B" d="M470 150 c 30-25 70-10 60 15 c-10 25-50 20-60-15z"/>
+        <path fill="#6E121B" d="M330 300 c 8 40 6 80 4 110 c-1 10-12 10-13 0 c-2-30-4-70 9-110z"/>
+      </g>
+      <g filter="url(#f-sat)" fill="#6E121B">
+        <path d="M0-11 C3-5 5-2 5 2 A5 5 0 1 1 -5 2 C-5-2 -3-5 0-11z" transform="translate(520 300) rotate(114) scale(1.40)"/>
+        <path d="M0-11 C3-5 5-2 5 2 A5 5 0 1 1 -5 2 C-5-2 -3-5 0-11z" transform="translate(120 120) rotate(-66) scale(1.00)"/>
+        <path d="M0-11 C3-5 5-2 5 2 A5 5 0 1 1 -5 2 C-5-2 -3-5 0-11z" transform="translate(400 352) rotate(147) scale(1.70)"/>
+        <path d="M0-11 C3-5 5-2 5 2 A5 5 0 1 1 -5 2 C-5-2 -3-5 0-11z" transform="translate(560 270) rotate(105) scale(0.50)"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ===== Loader: una respiración que termina en gota ===== -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="breathe">
+    <span class="breathe__ring"></span>
+    <span class="breathe__word breathe__word--in">Inhalá</span>
+    <span class="breathe__word breathe__word--out">Exhalá</span>
+    <i class="breathe__drop"></i>
+  </div>
+</div>
+
+<a class="skip-link" href="#main">Saltar al contenido</a>
+
+<!-- ===== Navbar ===== -->
+<header class="site-header" id="site-header">
+  <nav class="nav" aria-label="Principal">
+    <a class="nav__brand" href="index.html">Mindfulness para asesinos</a>
+
+    <ul class="nav__links" id="nav-links">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="personajes.html">Personajes</a></li>
+      <li><a href="trailer.html">Tráiler</a></li>
+      <li><a href="temporadas.html">Temporadas</a></li>
+      <li><a href="quiz.html">Quiz</a></li>
+      <li><a href="galeria.html">Galería</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
+    </ul>
+
+    <a class="nav__brand nav__brand--stained" href="index.html" aria-label="Mindfulness para asesinos">
+      <span aria-hidden="true">Mindfulness para <span class="stain-word">asesinos<svg class="stain-word__drip" viewBox="0 0 6 22" aria-hidden="true"><path d="M3 0 C3 8 1.5 12 3 22" /><circle cx="3" cy="19.5" r="2.4"/></svg></span></span>
+    </a>
+
+    <button class="nav__toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Abrir menú">
+      <span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<main id="main" class="page page--index">
+
+  <!-- ===== 1. HERO ===== -->
+  <section class="hero" id="inicio" data-stage="0" aria-labelledby="hero-title">
+    <!-- Pantalla 3D: el tráiler en loop y sin sonido, inclinada en perspectiva.
+         La sangre sale de adentro de la escena hacia el espectador y queda chorreando sobre el vidrio. -->
+    <div class="screen" id="hero-screen" data-video="cMxkl9X586w" data-start="58" aria-hidden="true">
+      <div class="screen__plane" id="hero-plane">
+        <img class="screen__poster" src="assets/img/galeria/galeria-02.jpg" width="1280" height="720" alt="">
+        <div class="screen__video" id="hero-video"></div>
+        <div class="screen__glass"></div>
+      </div>
+      <canvas class="screen__blood" id="screen-blood" width="600" height="420"></canvas>
+    </div>
+    <div class="shell hero__grid">
+      <p class="eyebrow reveal">Lección 01 · Respirar</p>
+
+      <h1 class="hero__title reveal" id="hero-title">
+        <span class="hero__line hero__line--glow"><span class="hero__word" aria-hidden="true">Mindfulness</span><span class="sr-only">Mindfulness</span></span>
+        <span class="hero__line hero__line--para" aria-hidden="true">para</span>
+        <span class="hero__line hero__line--red"><span class="hero__word" aria-hidden="true">asesino</span><span class="hero__target hero__word" aria-hidden="true">s</span><span class="sr-only">para asesinos</span></span>
+
+        <!-- Gota -->
+        <svg class="blood-drip" id="blood-drip" viewBox="0 0 14 400" preserveAspectRatio="none" aria-hidden="true">
+          <path class="blood-drip__path" d="M7 0 C7 90 5 180 7 260 C8.5 330 6.5 360 7 400" pathLength="1"/>
+          <ellipse class="blood-drip__bulb" cx="7" cy="396" rx="6.5" ry="9"/>
+        </svg>
+
+        <!-- Mancha: simulación en canvas (ver js/blood.js), filtro #f-goo-blood -->
+        <canvas class="blood-canvas" id="blood-canvas" width="600" height="420" aria-hidden="true"></canvas>
+      </h1>
+
+      <div class="hero__panel">
+      <p class="hero__lead reveal">Björn Diemel tenía un cliente imposible, una esposa harta y una hija a la que no veía. Hizo un curso de mindfulness. Ahora tiene un problema menos.</p>
+
+      <div class="hero__cta reveal">
+        <a class="btn btn--primary" href="personajes.html">Empezar el curso</a>
+        <a class="btn btn--ghost" href="https://www.netflix.com/title/81554969" target="_blank" rel="noopener">Ver en Netflix</a>
+      </div>
+
+      <dl class="hero__meta reveal">
+        <div><dt>Género</dt><dd>Comedia negra</dd></div>
+        <div><dt>Origen</dt><dd>Alemania · Netflix</dd></div>
+        <div><dt>Temporadas</dt><dd>2 <small>la tercera, en rodaje</small></dd></div>
+        <div><dt>Basada en</dt><dd>Los libros de Karsten Dusse</dd></div>
+      </dl>
+
+      <a class="hero__scroll reveal" href="#porque" aria-label="Seguir leyendo">
+        <span>Deslizá con calma</span>
+        <svg viewBox="0 0 12 40" aria-hidden="true"><path d="M6 0v36M1 31l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+      </a>
+      </div>
+    </div>
+    <div class="hero__trail" id="hero-trail" aria-hidden="true"></div>
+  </section>
+
+  <!-- ===== POR QUÉ VERLA ===== -->
+  <section class="section section--porque" id="porque" data-stage="0" aria-labelledby="porque-title">
+    <div class="shell porque">
+      <div class="porque__lead">
+        <p class="eyebrow reveal">Antes de empezar</p>
+        <h2 class="section__title reveal" id="porque-title">Es una comedia. También es una <em class="stain-word">masacre</em>. Las dos cosas, con mucha calma.</h2>
+      </div>
+      <div class="porque__body">
+        <p class="reveal"><strong>La premisa.</strong> Un abogado de la mafia va a un curso de mindfulness para salvar su matrimonio. Funciona. Cada técnica que aprende (respirar, aceptar, soltar) le sirve para lidiar con su jefe, Dragan. Literalmente.</p>
+        <p class="reveal"><strong>El tono.</strong> Nada de gritos. Björn narra su vida con la voz serena de una app de meditación mientras el mundo se le desarma alrededor. La risa viene de esa calma, y el horror también.</p>
+        <p class="reveal"><strong>Por qué ahora.</strong> La primera temporada fue número 1 global de Netflix en habla no inglesa; la segunda salió en mayo de 2026 y la tercera se filma este año. Ocho episodios de media hora: se ve en un fin de semana y se recuerda bastante más.</p>
+        <p class="porque__fans reveal">Si te gustaron <span>Dexter</span>, <span>Barry</span> o <span>Fleabag</span>, este curso es para vos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ÍNDICE DEL CURSO ===== -->
+  <section class="section section--indice" id="indice" data-stage="1" aria-labelledby="indice-title">
+    <div class="shell">
+      <header class="section__head">
+        <p class="eyebrow reveal">El curso · seis lecciones</p>
+        <h2 class="section__title reveal" id="indice-title">Un programa para volver al presente. Y no <em class="stain-word">volver</em></h2>
+        <p class="section__lead reveal">Cada lección es una página. Se recomienda hacerlas en orden y respirar entre una y otra.</p>
+      </header>
+      <ol class="syllabus reveal">
+        <li><span class="syllabus__row syllabus__row--here"><span class="syllabus__num">01</span><span class="syllabus__body"><span class="syllabus__title">Respirar</span><span class="syllabus__desc">Estás acá. Ya hiciste lo más difícil: entrar.</span></span><span class="syllabus__go syllabus__go--here">En curso</span></span></li>
+        <li><a class="syllabus__row" href="personajes.html"><span class="syllabus__num">02</span><span class="syllabus__body"><span class="syllabus__title">Aceptar a los demás</span><span class="syllabus__desc">Ocho personas que deberían respirar más. Retratos, roles y lo que cada uno cree que controla.</span></span><span class="syllabus__go">Personajes</span></a></li>
+        <li><a class="syllabus__row" href="trailer.html"><span class="syllabus__num">03</span><span class="syllabus__body"><span class="syllabus__title">Mirar sin apartar la vista</span><span class="syllabus__desc">El tráiler oficial. La pantalla no siempre se queda quieta.</span></span><span class="syllabus__go">Tráiler</span></a></li>
+        <li><a class="syllabus__row" href="temporadas.html"><span class="syllabus__num">04</span><span class="syllabus__body"><span class="syllabus__title">Soltar</span><span class="syllabus__desc">Dos temporadas, dieciséis ejercicios. Cuáles dejan marca.</span></span><span class="syllabus__go">Temporadas</span></a></li>
+        <li><a class="syllabus__row" href="quiz.html"><span class="syllabus__num">05</span><span class="syllabus__body"><span class="syllabus__title">Actuar con conciencia</span><span class="syllabus__desc">Seis situaciones de tu vida cotidiana y una llamada. Elegí una técnica antes de hacer algo irreversible.</span></span><span class="syllabus__go">Quiz</span></a></li>
+        <li><a class="syllabus__row" href="galeria.html"><span class="syllabus__num">06</span><span class="syllabus__body"><span class="syllabus__title">Observar sin juzgar</span><span class="syllabus__desc">Escenas de un curso intensivo. Mirar, y nada más.</span></span><span class="syllabus__go">Galería</span></a></li>
+        <li><a class="syllabus__row syllabus__row--extra" href="contacto.html"><span class="syllabus__num">+</span><span class="syllabus__body"><span class="syllabus__title">Consultorio</span><span class="syllabus__desc">¿Tenés un problema con nombre y apellido? Contanos antes de resolverlo.</span></span><span class="syllabus__go">Contacto</span></a></li>
+      </ol>
+    </div>
+  </section>
+
+</main>
+
+
+<footer class="footer">
+  <div class="shell">
+    <p class="footer__close reveal">Inhalá. Exhalá. <span class="stain-word">Cerrá la pestaña.</span></p>
+    <nav class="footer__links" aria-label="Pie"><a href="index.html">Inicio</a><a href="temporadas.html">Temporadas</a><a href="quiz.html">Quiz</a><a href="contacto.html">Contacto</a><a href="https://www.netflix.com/title/81554969" target="_blank" rel="noopener">Netflix</a></nav>
+    <div class="footer__row">
+      <p class="footer__brand">Mindfulness para <span class="stain-word">asesinos</span></p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/blood.js" defer></script>
+<script src="js/main.js" defer></script>
+</body>
+</html>
