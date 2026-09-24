@@ -180,6 +180,19 @@ máx. 6, las viejas se desvanecen). Sin `prefers-reduced-motion`.
   desbordes en las siete páginas; a 1180 la marca derecha vuelve con 24 px
   de aire respecto del último link.
 
+## 1j. v18: submenú de temporadas + publicación (2026-09-23)
+- Navbar: "Temporadas" es un botón desplegable con tres submenús
+  (Temporada 1 / 2 / 3) en las siete páginas. Desktop: se abre al pasar
+  el mouse, al enfocar o con el chevron; móvil: tocar "Temporadas" lo
+  despliega dentro del menú hamburguesa. Cada ítem va a
+  `temporadas.html#t1..t3` y main.js abre esa temporada (cierra las
+  otras) y hace scroll hasta ella; también al cambiar el hash.
+- Temporadas 1 y 2 con ficha de datos (`.facts`): estreno, ranking,
+  novela que adaptan y "lección clave".
+- Publicado en GitHub Pages: https://ergometrika.github.io/proyecto-mindfulness-asesinos/
+  (repo ErgoMetrika/proyecto-mindfulness-asesinos, rama main, raíz).
+  robots.txt y sitemap.xml ya apuntan a esa URL.
+
 ## 2. Stack y estructura
 
 HTML5 + CSS3 + JS vanilla. Sin build, sin npm. Se abre `index.html` directo

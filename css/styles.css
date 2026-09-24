@@ -1866,3 +1866,47 @@ html[data-stage="2"] .footer__brand .stain-word, html[data-stage="3"] .footer__b
   .nav__links { gap: var(--s-2); padding-top: var(--s-4); }
   .nav__links a { font-size: 1.3rem; }
 }
+
+/* =====================================================================
+   v18: "Temporadas" en la navbar es un botón desplegable con tres submenús
+   ===================================================================== */
+.nav__item--sub { position: relative; display: flex; align-items: center; gap: 4px; }
+.nav__sub-toggle { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; color: inherit; transition: transform 300ms var(--ease-out), background-color 200ms; }
+.nav__sub-toggle svg { width: 10px; height: 7px; }
+.nav__sub-toggle:hover { background: var(--surface); }
+.nav__item--sub.is-open .nav__sub-toggle, .nav__item--sub:hover .nav__sub-toggle { transform: rotate(180deg); }
+.nav__sub { display: grid; }
+.nav__sub a { display: grid; grid-template-columns: 28px minmax(0, 1fr); column-gap: var(--s-2); align-items: baseline; padding: var(--s-2) 0; text-decoration: none; font-size: var(--fs--1); }
+.nav__sub a::before, .nav__sub a::after { display: none; }
+.nav__sub b { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-1); line-height: 1; color: var(--sangre); }
+.nav__sub span { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-0); line-height: 1.15; transition: color 200ms; }
+.nav__sub small { grid-column: 2; font-family: var(--font-display); font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+.nav__sub a:hover span, .nav__sub a:focus-visible span { color: var(--sangre); }
+@media (min-width: 901px) {
+  .nav__sub {
+    position: absolute; left: -14px; top: calc(100% + 6px); z-index: 40; min-width: 290px;
+    padding: var(--s-3) var(--s-4); background: var(--bg); border: 1px solid var(--line); box-shadow: 0 24px 50px -30px rgba(20, 19, 17, .5);
+    opacity: 0; visibility: hidden; transform: translateY(-6px);
+    transition: opacity 220ms var(--ease-out), transform 260ms var(--ease-out), visibility 220ms;
+  }
+  .nav__sub::before { content: ""; position: absolute; left: 0; right: 0; top: -8px; height: 8px; }
+  .nav__sub::after { content: ""; position: absolute; left: 22px; top: -1px; width: 3px; height: 0; background: var(--sangre); border-radius: 0 0 50% 50% / 0 0 70% 70%; transition: height 500ms var(--ease-out) 150ms; }
+  .nav__item--sub:hover .nav__sub, .nav__item--sub:focus-within .nav__sub, .nav__item--sub.is-open .nav__sub { opacity: 1; visibility: visible; transform: none; }
+  .nav__item--sub:hover .nav__sub::after, .nav__item--sub.is-open .nav__sub::after { height: 12px; }
+  .nav__sub li + li a { border-top: 1px solid var(--line); }
+}
+@media (max-width: 900px) {
+  .nav__item--sub { flex-wrap: wrap; gap: 0 var(--s-3); }
+  .nav__sub-toggle { width: 44px; height: 44px; }
+  .nav__sub-toggle svg { width: 16px; height: 11px; }
+  .nav__sub { flex-basis: 100%; grid-template-rows: 0fr; overflow: hidden; transition: grid-template-rows 400ms var(--ease-out); }
+  .nav__sub > li { min-height: 0; }
+  .nav__sub > li:first-child { overflow: hidden; }
+  .nav__item--sub.is-open .nav__sub { grid-template-rows: 1fr; }
+  .nav__sub a { padding: var(--s-2) 0 var(--s-2) var(--s-3); font-size: var(--fs-0); letter-spacing: 0; }
+  .nav__sub span { font-size: var(--fs-1); }
+}
+@media (prefers-reduced-motion: reduce) { .nav__sub, .nav__sub-toggle { transition: none; } }
+
+/* v18: al llegar por #t1..t3 la temporada queda debajo de la navbar, no tapada */
+.season-acc { scroll-margin-top: calc(var(--nav-h) + 16px); }

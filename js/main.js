@@ -91,6 +91,34 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
 
   /* ------------------------------------------------------------------
+     3b. Submenú de temporadas en la navbar (botón desplegable, v18)
+     ------------------------------------------------------------------ */
+  const subItem = document.getElementById('nav-temporadas');
+  if (subItem) {
+    const subBtn = subItem.querySelector('.nav__sub-toggle');
+    const setSub = function (open) { subItem.classList.toggle('is-open', open); subBtn.setAttribute('aria-expanded', String(open)); };
+    subBtn.addEventListener('click', function (e) { e.stopPropagation(); setSub(!subItem.classList.contains('is-open')); });
+    document.addEventListener('click', function (e) { if (!subItem.contains(e.target)) setSub(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setSub(false); });
+    // en el menú móvil, tocar "Temporadas" despliega las tres en vez de navegar
+    subItem.querySelector('.nav__sub-link').addEventListener('click', function (e) {
+      if (window.matchMedia('(max-width: 900px)').matches && !subItem.classList.contains('is-open')) { e.preventDefault(); e.stopPropagation(); setSub(true); }
+    });
+  }
+  // temporadas.html#t2 → abre esa temporada (y cierra las otras) al llegar o al cambiar el hash
+  function openSeasonFromHash() {
+    const id = (location.hash || '').replace('#', '');
+    if (!/^t[1-3]$/.test(id)) return;
+    document.querySelectorAll('.season-acc').forEach(function (d) {
+      const on = d.id === id;
+      d.open = on; d.classList.toggle('is-open', on);
+    });
+    const el = document.getElementById(id);
+    if (el) window.setTimeout(function () { el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' }); }, 80);
+  }
+  if (document.querySelector('.season-acc')) { openSeasonFromHash(); window.addEventListener('hashchange', openSeasonFromHash); }
+
+  /* ------------------------------------------------------------------
      4. Carrusel de personajes: infinito, quieto, pasa solo de a una (v17)
         Se clona el elenco dos veces (tres juegos); el scroll vive siempre
         dentro del juego del medio, así nunca se ve el final ni rebota.
@@ -287,8 +315,9 @@
   // salida de página: fade corto antes de navegar a otra lección
   if (!reduced) {
     document.addEventListener('click', function (e) {
-      const a = e.target.closest('a[href$=".html"]');
+      const a = e.target.closest('a[href*=".html"]');
       if (!a || a.target === '_blank' || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+      if (a.pathname === location.pathname && a.hash) return;   // ancla dentro de la misma página
       e.preventDefault();
       document.body.classList.add('is-leaving');
       // salpicón desde el punto del click (misma simulación que el hero) mientras la página se apaga
