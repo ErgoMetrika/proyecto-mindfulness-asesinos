@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # Reemplazar por la URL final al publicar
-Sitemap: https://TU-DOMINIO/sitemap.xml
+Sitemap: https://ergometrika.github.io/proyecto-mindfulness-asesinos/sitemap.xml

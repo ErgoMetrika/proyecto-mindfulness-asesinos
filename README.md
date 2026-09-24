@@ -70,7 +70,7 @@ js/quiz.js         preguntas, perfiles y lógica del quiz
 js/main.js         navbar, reveals, carrusel, tilt, desplegable, goteo ambiental, lightbox
 assets/img/        personajes/ temporadas/ galeria/
 robots.txt         SEO: permite indexar; apunta al sitemap
-sitemap.xml        SEO: las seis páginas (reemplazar https://TU-DOMINIO/ al publicar)
+sitemap.xml        SEO: las seis páginas (reemplazar https://ergometrika.github.io/proyecto-mindfulness-asesinos/ al publicar)
 SPEC.md            sistema de diseño y brief completo
 ```
 
@@ -110,7 +110,7 @@ tanto cae una gota del logo y queda una mancha al pie de la pantalla.
   en el `<form>` y quitar el `preventDefault` de `main.js` (sección 8).
 - SEO: title y description por página, Open Graph/Twitter, JSON-LD, un h1
   por página, alt descriptivos, `robots.txt` y `sitemap.xml`. Antes de
-  publicar, reemplazar `https://TU-DOMINIO/` en ambos archivos y, si se
+  publicar, reemplazar `https://ergometrika.github.io/proyecto-mindfulness-asesinos/` en ambos archivos y, si se
   quiere, `og:image` por una URL absoluta.
 - Fondo que respira: anillos concéntricos que se expanden cada 9 s y se
   tiñen de rojo lección a lección.
