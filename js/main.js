@@ -15,7 +15,7 @@
   const page = document.body.getAttribute('data-page');
   navLinks.forEach(function (a) {
     const href = a.getAttribute('href') || '';
-    a.classList.toggle('is-active', href === page + '.html' || href === '#/' + page);
+    a.classList.toggle('is-active', href === page + '.html' || href === '#/' + page || (href === 'temporadas.html' && /^temporada-\d$/.test(page)));
   });
 
   function setStage(section) {

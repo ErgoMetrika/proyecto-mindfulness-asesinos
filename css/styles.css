@@ -1914,3 +1914,52 @@ html[data-stage="2"] .footer__brand .stain-word, html[data-stage="3"] .footer__b
 /* v19: el video del hero se recorta más para dejar afuera la barra de título y los controles de YouTube */
 .hero .screen__video iframe { transform: translate(-50%, -50%) scale(1.32); }
 @media (max-width: 900px) { .hero .screen__video iframe { transform: translate(-50%, -50%) scale(1.7); } }
+
+/* =====================================================================
+   v20: páginas de temporada (temporada-1/2/3.html), misma estructura
+   ===================================================================== */
+.section--season .eyebrow a { color: inherit; text-decoration: none; border-bottom: 1px solid transparent; }
+.section--season .eyebrow a:hover { border-bottom-color: currentColor; }
+.season-hero { display: grid; gap: var(--s-5); margin-bottom: var(--s-7); }
+@media (min-width: 820px) { .season-hero { grid-template-columns: 260px minmax(0, 1fr); column-gap: var(--s-7); align-items: start; } }
+.season-hero .season__poster { max-width: 260px; }
+.season-hero__body { display: grid; gap: var(--s-3); max-width: 62ch; }
+.season-hero__body > p { max-width: 60ch; }
+.season-hero__num { font-family: var(--font-display); font-weight: 200; font-size: var(--fs-5); line-height: 1; color: var(--sangre); }
+.season-hero__title { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-3); line-height: 1.1; margin-top: calc(var(--s-2) * -1); }
+.season-hero .season-acc__meta { margin-bottom: var(--s-2); }
+.season-hero .facts { margin-top: var(--s-3); }
+.season-block { margin-bottom: var(--s-7); }
+.season-block__title { font-family: var(--font-display); font-weight: 200; font-size: var(--fs-3); line-height: 1.1; margin-bottom: var(--s-3); }
+.season-block__note { color: var(--muted); font-size: var(--fs--1); max-width: 60ch; margin-bottom: var(--s-4); }
+.eps--page { border-top: 0; }
+.ep--soon { grid-template-rows: auto auto auto; }
+.ep__still--soon { display: grid; place-items: center; background: linear-gradient(160deg, rgba(243, 241, 234, .08), transparent 55%), var(--salvia-oscura); color: rgba(243, 241, 234, .8); font-family: var(--font-display); font-weight: 200; font-size: 2.6rem; }
+.ep__title small { display: inline-block; margin-left: 6px; font-family: var(--font-display); font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: var(--sangre); vertical-align: middle; }
+.ep__desc { grid-column: 1 / 3; font-size: var(--fs--1); color: var(--muted); line-height: 1.45; }
+.minis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-5) var(--s-4); }
+@media (min-width: 820px) { .minis { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.mini { display: grid; gap: var(--s-1); align-content: start; }
+.mini__media { aspect-ratio: 3 / 4; overflow: hidden; background: var(--salvia-oscura); margin-bottom: var(--s-2); position: relative; }
+.mini__media img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.3); transition: filter 600ms var(--ease-out); }
+.mini:hover .mini__media img { filter: saturate(1); }
+.mini__ph { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--font-display); font-weight: 200; font-size: 6rem; color: rgba(243, 241, 234, .8); }
+.mini__name { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-1); line-height: 1.1; }
+.mini__actor { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.mini__desc { font-size: var(--fs--1); color: var(--muted); margin-top: var(--s-1); }
+.moments { display: grid; gap: var(--s-4); border-top: 1px solid var(--line); }
+.moments li { display: grid; grid-template-columns: 56px minmax(0, 1fr); column-gap: var(--s-3); padding: var(--s-4) 0; border-bottom: 1px solid var(--line); }
+.moment__num { grid-row: 1 / 3; font-family: var(--font-display); font-weight: 200; font-size: var(--fs-3); line-height: 1; color: var(--sangre); }
+.moments h3 { font-family: var(--font-display); font-weight: 300; font-size: var(--fs-2); line-height: 1.15; }
+.moments p { color: var(--muted); max-width: 60ch; margin-top: var(--s-1); }
+.season-nav__row { display: grid; gap: var(--s-4); border-top: 1px solid var(--line); padding-top: var(--s-5); }
+@media (min-width: 700px) { .season-nav__row { grid-template-columns: 1fr 1fr; } .season-nav__link--next { text-align: right; } }
+.season-nav__link { display: grid; gap: var(--s-2); text-decoration: none; }
+.season-nav__title { font-family: var(--font-display); font-weight: 200; font-size: clamp(var(--fs-2), 3vw, var(--fs-4)); line-height: 1.05; }
+.season-nav__link:hover .season-nav__title { color: var(--sangre); }
+.season-acc__more { margin-top: var(--s-3); }
+@media (max-width: 900px) { .season-hero, .season-block { margin-bottom: var(--s-6); } .moments li { grid-template-columns: 44px minmax(0, 1fr); } }
+
+/* v20: en las páginas de temporada los episodios no dependen del desplegable */
+.eps--page > li { opacity: 1; transform: none; transition: none; }
+.ep--soon .ep__still { grid-column: 1 / 3; }

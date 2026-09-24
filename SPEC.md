@@ -193,6 +193,21 @@ máx. 6, las viejas se desvanecen). Sin `prefers-reduced-motion`.
   (repo ErgoMetrika/proyecto-mindfulness-asesinos, rama main, raíz).
   robots.txt y sitemap.xml ya apuntan a esa URL.
 
+## 1k. v19–v20: video limpio y páginas por temporada (2026-09-23)
+- Hero: el reproductor arranca tapado (`is-loading` desde que se crea) y se
+  muestra 4 s después del primer PLAYING (YouTube dibuja título y controles
+  al arrancar); recorte 1.32 (1.7 en móvil); rebobina 2,6 s antes del
+  final. Los assets llevan `?v=N` para vencer la caché.
+- Tres páginas separadas: `temporada-1.html`, `temporada-2.html`,
+  `temporada-3.html`, con la misma estructura y cantidad de bloques:
+  cabecera (póster, número, sinopsis en dos párrafos, ficha de 4 datos),
+  "Los ocho ejercicios" (8 episodios; en la 3 son títulos y sinopsis
+  previstos, marcados como inventados a partir de la novela), "Quién entra
+  en escena" (4 personajes), "Tres momentos" sin spoilers (en la 3, "Tres
+  cosas que esperamos"), mantra, y navegación anterior/siguiente. El
+  submenú de la navbar y los "Ver la temporada completa" del desplegable
+  llevan ahí. Sitemap actualizado.
+
 ## 2. Stack y estructura
 
 HTML5 + CSS3 + JS vanilla. Sin build, sin npm. Se abre `index.html` directo
