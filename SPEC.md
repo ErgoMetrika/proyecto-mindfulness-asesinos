@@ -208,6 +208,29 @@ máx. 6, las viejas se desvanecen). Sin `prefers-reduced-motion`.
   submenú de la navbar y los "Ver la temporada completa" del desplegable
   llevan ahí. Sitemap actualizado.
 
+## 1l. v21–v22: moscas, ilustraciones de la T3, hero que termina en foto
+- `js/flies.js` (sólo inicio): cinco o seis moscas dibujadas en SVG
+  (cabeza con ojos rojizos, tórax, abdomen rayado, alas translúcidas con
+  venas, seis patas) con sombra difusa desplazada. Máquina de estados por
+  mosca: entra desde un borde, camina (marcha de trípode), se frena, se
+  frota las patas delanteras, gira en seco, da saltos cortos con alas
+  borrosas, se espanta si el mouse se acerca (cada una con su reflejo: la
+  mayoría escapa, alguna distraída no) y a los 16 s se va volando. Se pueden
+  aplastar con el mouse: queda pegada con las patas abiertas, una mancha y un
+  salpicón, y a los 6–9 s se limpia sola.
+  Después, cada 25–45 s vuelven una o dos de visita. Capa fija z 70 sobre el
+  loader. Sin `prefers-reduced-motion`.
+- La respiración de bienvenida se muestra en cada carga del inicio
+  (también al actualizar); se quitó el candado de `sessionStorage`.
+- Hero: el tráiler ya no repite: 2,6 s antes del final funde a la foto de
+  Björn en el lago (`.screen.is-ended`), el iframe se quita y la foto queda
+  con un Ken Burns de 40 s.
+- Temporada 3: ocho ilustraciones SVG "previstas" (`assets/img/episodios/
+  t3-0N.svg`, generadas con `scratchpad/t3art.py`): estudio→camino,
+  mojón con concha, cuesta con mochila, albergue con mesa larga, cruce
+  con flechas, iglesia con confesionario, catedral, la casa al volver. Y un
+  póster previsto (`temporadas/temporada-03.svg`) marcado "no oficial".
+
 ## 2. Stack y estructura
 
 HTML5 + CSS3 + JS vanilla. Sin build, sin npm. Se abre `index.html` directo

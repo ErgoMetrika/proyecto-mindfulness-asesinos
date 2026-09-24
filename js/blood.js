@@ -340,8 +340,8 @@
     window.setTimeout(drip, 350);
   }
 
-  let seenIntro = false;
-  try { seenIntro = !!sessionStorage.getItem('mpa-intro'); sessionStorage.setItem('mpa-intro', '1'); } catch (err) { seenIntro = false; }
+  // v21: la respiración de bienvenida se muestra en cada carga del inicio (también al actualizar)
+  const seenIntro = false;
   if (!hero) {
     body.classList.add('is-loaded'); root.classList.add('is-loaded');
   } else if (reduced || seenIntro) {
@@ -378,10 +378,17 @@
         const f = document.createElement('iframe');
         f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&mute=1&controls=0&loop=1&playlist=' + id +
                 '&start=' + start + '&rel=0&modestbranding=1&playsinline=1&disablekb=1&iv_load_policy=3';
+        window.setTimeout(function () { screen.classList.add('is-loading'); screen.classList.add('is-ended'); window.setTimeout(function () { f.remove(); }, 900); }, 70000);
         f.title = 'Tráiler en loop, sin sonido'; f.allow = 'autoplay; encrypted-media'; f.tabIndex = -1;
         screen.classList.add('is-loading');
         videoBox.appendChild(f);
         window.setTimeout(function () { screen.classList.remove('is-loading'); }, 5000);
+      }
+      function finish(player) {
+        screen.classList.add('is-loading'); screen.classList.add('is-ended');
+        if (player.__loop) { clearInterval(player.__loop); player.__loop = null; }
+        try { player.pauseVideo(); } catch (err) {}
+        window.setTimeout(function () { try { videoBox.innerHTML = ''; } catch (err) {} }, 900);
       }
       window.onYouTubeIframeAPIReady = function () {
         if (!window.YT || !YT.Player) { fallbackIframe(); return; }
@@ -401,16 +408,17 @@
                 // la primera vez se muestra recién a los 4 s: YouTube dibuja su barra de título y controles al arrancar
                 if (!e.target.__shown) { e.target.__shown = true; window.setTimeout(function () { screen.classList.remove('is-loading'); }, 4000); }
                 else screen.classList.remove('is-loading');
-                // vuelve al inicio un segundo y medio antes del final: nunca aparece la pantalla de "videos relacionados"
+                // termina antes del final fundiendo a la foto de Björn, y se queda ahí (sin loop ni
+                // pantalla de "videos relacionados" de YouTube)
                 if (!e.target.__loop) {
                   e.target.__loop = setInterval(function () {
                     try {
                       const d = e.target.getDuration(), t = e.target.getCurrentTime();
-                      if (d && t > d - 2.6) { screen.classList.add('is-loading'); e.target.seekTo(start, true); }
+                      if (d && t > d - 2.6) { finish(e.target); }
                     } catch (err) {}
                   }, 250);
                 }
-              } else if (e.data === P.ENDED) { screen.classList.add('is-loading'); e.target.seekTo(start, true); e.target.playVideo(); }
+              } else if (e.data === P.ENDED) { finish(e.target); }
               else if (e.data === P.BUFFERING || e.data === P.UNSTARTED || e.data === P.CUED) { screen.classList.add('is-loading'); }
             }
           }

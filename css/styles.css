@@ -1971,3 +1971,45 @@ html[data-stage="2"] .footer__brand .stain-word, html[data-stage="3"] .footer__b
 .facts { min-width: 0; }
 .facts dd, .facts dt { overflow-wrap: anywhere; }
 @media (max-width: 640px) { .facts { grid-template-columns: minmax(0, 1fr); } }
+
+/* =====================================================================
+   v21: moscas sobre el monitor durante la respiración de bienvenida
+   ===================================================================== */
+.flies { position: fixed; inset: 0; z-index: 70; pointer-events: none; overflow: hidden; }
+.fly { position: absolute; left: 0; top: 0; width: 30px; height: 25px; margin: -12px 0 0 -15px; will-change: transform; }
+.fly__body { position: absolute; inset: 0; transform-origin: 50% 50%; will-change: transform; transition: translate 200ms var(--ease-out); translate: 0 calc(var(--lift, 0) * -6px); }
+.fly__svg { width: 100%; height: 100%; overflow: visible; display: block; }
+.fly__shadow {
+  position: absolute; left: 22%; top: 30%; width: 62%; height: 46%; border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(20, 19, 17, .42), rgba(20, 19, 17, .18) 55%, transparent 75%);
+  filter: blur(1.5px); transition: transform 200ms var(--ease-out), opacity 200ms;
+  transform: translate(calc(var(--lift, 0) * 6px), calc(var(--lift, 0) * 9px)) scale(calc(1 + var(--lift, 0) * .5)); opacity: calc(.95 - var(--lift, 0) * .5);
+}
+.fly__hip { transform-box: view-box; transform-origin: 0 0; }
+.fly__hip--a, .fly__hip--b { transform-origin: 0px 0px; }
+.fly__leg { fill: none; stroke: #1c1a18; stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; }
+.fly__wing { transform-origin: 2px 0; }
+.fly__wing--l { transform-origin: 2px -2px; }
+.fly__wing--r { transform-origin: 2px 2px; }
+.fly.is-flying .fly__svg { filter: blur(.4px); }
+.fly.is-flying .fly__wings { filter: blur(1.2px); }
+@media (prefers-reduced-motion: reduce) { .flies { display: none; } }
+
+/* v21: la cabecera de temporada vuelve a dos columnas en desktop (la regla móvil se había pisado) */
+@media (min-width: 820px) { .season-hero { grid-template-columns: 260px minmax(0, 1fr); } }
+
+/* v22: el hero termina en la foto de Björn: fundido lento y Ken Burns muy suave */
+.screen.is-ended .screen__video { transition: opacity 1400ms var(--ease-out); }
+.screen.is-ended .screen__poster { animation: kenburns 40s var(--ease-out) forwards; }
+
+/* v22: las moscas se pueden aplastar con el mouse; quedan pegadas con una mancha y al rato se limpian */
+.fly { pointer-events: auto; cursor: crosshair; }
+.fly.is-squashed { pointer-events: none; }
+.fly.is-squashed .fly__shadow { opacity: 0; }
+.fly.is-squashed .fly__svg { filter: contrast(1.1) brightness(.9); }
+.fly.is-squashed::after {
+  content: ""; position: absolute; left: 10%; top: 25%; width: 90%; height: 60%; border-radius: 50% 60% 40% 55% / 60% 40% 60% 40%;
+  background: radial-gradient(ellipse at 45% 50%, rgba(110, 12, 20, .55), rgba(140, 22, 30, .3) 55%, transparent 80%);
+  mix-blend-mode: multiply; z-index: -1;
+}
+.fly.is-cleaning { transition: opacity 1400ms var(--ease-out); opacity: 0; }
