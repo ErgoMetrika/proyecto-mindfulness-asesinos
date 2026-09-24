@@ -71,7 +71,7 @@
       x: edge === 'left' ? -40 : edge === 'right' ? W + 40 : rnd(W * .2, W * .8),
       y: edge === 'top' ? -40 : edge === 'bottom' ? H + 40 : rnd(H * .2, H * .8),
       a: 0, speed: 0, phase: 0, state: 'enter', t: 0, until: 0, turnTo: 0, size: size, dead: false, born: performance.now(),
-      reflex: rnd(.45, .95)   // qué tan alerta está: la mayoría se escapa, alguna distraída se deja aplastar
+      reflex: rnd(.2, .7)     // qué tan alerta está: se escapan seguido, pero se dejan alcanzar
     };
     // entra caminando desde el borde hacia adentro
     f.a = Math.atan2(rnd(H * .3, H * .7) - f.y, rnd(W * .3, W * .7) - f.x);
@@ -100,7 +100,7 @@
     if (s === 'pause') { f.speed = 0; f.until = rnd(.35, 1.4); }
     if (s === 'rub') { f.speed = 0; f.until = rnd(.7, 1.6); }
     if (s === 'turn') { f.speed = 6; f.until = rnd(.12, .25); f.turnTo = f.a + pick([-1, 1]) * rnd(1.2, 2.8); }
-    if (s === 'dart') { f.speed = rnd(650, 1000); f.until = rnd(.16, .3); f.turnTo = f.a + rnd(-.9, .9); f.a = f.turnTo; }
+    if (s === 'dart') { f.speed = rnd(520, 820); f.until = rnd(.14, .24); f.turnTo = f.a + rnd(-.9, .9); f.a = f.turnTo; }
     if (s === 'leave') {
       const W = window.innerWidth, H = window.innerHeight;
       const tx = pick([-120, W + 120]), ty = rnd(-120, H * .4);
@@ -202,13 +202,20 @@
   window.setTimeout(visit, LIFE + rnd(12000, 20000));
   // una mosca se espanta si le pasás el mouse cerca
   document.addEventListener('pointermove', function (e) {
+    const now = performance.now();
     flies.forEach(function (f) {
       if (f.dead || f.state === 'dart' || f.state === 'leave' || f.state === 'squashed') return;
       // se espanta según su reflejo (menos cuando está frotándose las patas o parada)
       const d = Math.hypot(e.clientX - f.x, e.clientY - f.y);
-      if (d > 64) return;
-      const alert = f.reflex * (f.state === 'rub' ? .35 : f.state === 'pause' ? .6 : 1) * (d < 30 ? 1 : .6);
-      if (Math.random() < alert) { f.a = Math.atan2(f.y - e.clientY, f.x - e.clientX); setState(f, 'dart'); }
+      if (d > 48) return;
+      // sólo reacciona cada tanto (no en cada movimiento del mouse) y con un pequeño retardo: da tiempo a hacer clic
+      if (now - (f.lastScare || 0) < 260) return;
+      f.lastScare = now;
+      const alert = f.reflex * (f.state === 'rub' ? .3 : f.state === 'pause' ? .5 : 1) * (d < 22 ? 1 : .5);
+      if (Math.random() < alert) {
+        const ax = e.clientX, ay = e.clientY;
+        window.setTimeout(function () { if (f.dead || f.state === 'squashed') return; f.a = Math.atan2(f.y - ay, f.x - ax); setState(f, 'dart'); }, rnd(120, 260));
+      }
     });
   }, { passive: true });
 })();
